@@ -1,0 +1,10 @@
+services:
+  rp-web:
+    container_name: rp-web
+    image: node:21-alpine
+    volumes:
+      - .:/app:delegated
+      - ./node_modules:/app/node_modules
+    ports:
+      - 8080:8080
+    working_dir: /app
