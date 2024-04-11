@@ -1,3 +1,15 @@
+Install:
+```bash
+docker compose run rp-web npm install
+```
+
+Run:
+```bash
+docker compose run rp-web
+```
+
+# TODO
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
