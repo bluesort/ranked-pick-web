@@ -5,7 +5,7 @@ docker compose run rp-web npm install
 
 Run:
 ```bash
-docker compose run rp-web
+docker compose run --service-ports rp-web
 ```
 
 # TODO
