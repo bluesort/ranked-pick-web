@@ -1,5 +1,4 @@
-import Body from '@/components/layout/Body';
-import Header from '@/components/layout/Header';
+import AppLayout from '@/components/layout/AppLayout';
 import { useEffect } from 'react';
 
 function App() {
@@ -10,10 +9,7 @@ function App() {
   }, []);
 
   return (
-    <div className="relative h-screen w-screen">
-      <Header />
-      <Body />
-    </div>
+    <AppLayout />
   );
 }
 

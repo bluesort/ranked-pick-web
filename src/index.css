@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+h1 {
+  font-size: 2.0rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
