@@ -16,7 +16,7 @@ function Header() {
 function HeaderIconLink(props: { to: string, icon: JSX.Element, className: string }) {
   const { to, icon, className } = props;
   return (
-    <Link to={to} className={`${className} bg-primary-darkened rounded-md text-primary-foreground hover:brightness-90`}>
+    <Link to={to} className={`${className} bg-primary rounded-md text-primary-foreground brightness-110 hover:brightness-125`}>
       {icon}
     </Link>
   );
