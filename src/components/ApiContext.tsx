@@ -43,21 +43,18 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 	}, []);
 
 	const signin = useCallback(async (params: { [key: string]: string }) => {
-		return fetch('/api/signin', {
+		const resp = await fetch('/api/signin', {
 			method: 'POST',
 			headers: { "Accept":"application/json", "Content-Type":"application/json" },
 			body: JSON.stringify(params),
-		}).then(async (resp: Response) => {
-			if (resp.ok) {
-				const respJson = await resp.json();
-				setCurrentUser(respJson.user);
-			} else {
-				// throw error w/ text
-				console.log(resp);
-				throw(resp.text);
-			}
-			return resp;
 		});
+		const body = await resp.json();
+		if (resp.ok && body?.user) {
+			setCurrentUser(body.user);
+		} else {
+			throw(body);
+		}
+		return resp;
 	}, []);
 
 	const signup = useCallback(async (params: { [key: string]: string }) => {

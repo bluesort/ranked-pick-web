@@ -19,23 +19,22 @@ export function SigninForm({ onClose }: Props) {
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setLoading(true);
-		// try {
-		// 	await signin({email, password});
-		// } catch (err) {
-		// 	console.log(err);
-		// 	setError(err.message);
-		// } finally {
-		// 	setLoading(false);
-		// }
-		signin({email, password}).catch(err => {
-			console.log(err);
-			setError(err.message);
-		});
+		try {
+			await signin({email, password});
+		} catch (err) {
+			if (typeof(err) === 'string') {
+				setError(err);
+			} else {
+				setError('Something went wrong');
+			}
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
 		<form onSubmit={onSubmit}>
-			{error && <p className="text-red-800 mb-4">{error}</p>}
+			{error && <p className="text-red-800 mb-4 first-letter:uppercase">{error}</p>}
 
 			<Label htmlFor="email">Email</Label>
 			<Input
