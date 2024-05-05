@@ -3,33 +3,39 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/Button";
 import { Spinner } from "@/components/ui/Spinner";
-import { Form } from "@/components/ui/Form";
+import { useApi } from "@/components/ApiContext";
 
 interface Props {
 	onClose: () => void;
 }
 
 export function SigninForm({ onClose }: Props) {
+	const { signin } = useApi();
+	const [error, setError] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		console.log(e);
-			e.preventDefault();
-			setLoading(true);
-			// try {
-			//   await signin(email, password);
-			// } catch (err) {
-			//   setError(err.message);
-			// } finally {
-			//   setLoading(false);
-			// }
+		e.preventDefault();
+		setLoading(true);
+		// try {
+		// 	await signin({email, password});
+		// } catch (err) {
+		// 	console.log(err);
+		// 	setError(err.message);
+		// } finally {
+		// 	setLoading(false);
+		// }
+		signin({email, password}).catch(err => {
+			console.log(err);
+			setError(err.message);
+		});
 	};
 
 	return (
 		<form onSubmit={onSubmit}>
-			{/* {error && <p className="text-red-800 mb-4">{error}</p>} */}
+			{error && <p className="text-red-800 mb-4">{error}</p>}
 
 			<Label htmlFor="email">Email</Label>
 			<Input
