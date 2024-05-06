@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/Dialog";
 import { SigninForm } from "@/components/views/auth/SigninForm";
+import { SignupForm } from "@/components/views/auth/SignupForm";
 
 interface Props {
   triggerClassName: string;
@@ -20,14 +21,14 @@ export function AuthDialog({ triggerClassName }: Props) {
         </DialogHeader>
         {isSigningUp ? (
           <>
-            SIGNUP
+            <SignupForm onComplete={() => setOpen(false)} />
             <p className="text-center">
               Already have an account? <button onClick={() => setIsSigningUp(false)} className="underline">Sign in</button>
             </p>
           </>
         ):(
           <>
-            <SigninForm onClose={() => setOpen(true)} />
+            <SigninForm onComplete={() => setOpen(false)} />
             <p className="text-center">
               Don't have an account? <button onClick={() => setIsSigningUp(true)} className="underline">Sign up</button>
             </p>

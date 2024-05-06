@@ -6,10 +6,10 @@ import { Spinner } from "@/components/ui/Spinner";
 import { useApi } from "@/components/ApiContext";
 
 interface Props {
-	onClose: () => void;
+	onComplete: () => void;
 }
 
-export function SigninForm({ onClose }: Props) {
+export function SigninForm({ onComplete }: Props) {
 	const { signin } = useApi();
 	const [error, setError] = useState("");
 	const [email, setEmail] = useState("");
@@ -21,6 +21,7 @@ export function SigninForm({ onClose }: Props) {
 		setLoading(true);
 		try {
 			await signin({email, password});
+			onComplete();
 		} catch (err) {
 			if (typeof(err) === 'string') {
 				setError(err);
@@ -54,8 +55,8 @@ export function SigninForm({ onClose }: Props) {
 			/>
 
 			<div className="flex justify-end mt-4">
-				<Button onClick={onClose} className="mr-2">Cancel</Button>
-				<Button type="submit">
+				<Button type="button" onClick={onComplete} className="mr-2">Cancel</Button>
+				<Button type="submit" className="w-20">
 						{loading ? <Spinner /> : "Submit"}
 				</Button>
 			</div>

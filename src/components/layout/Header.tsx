@@ -1,8 +1,11 @@
+import { useApi } from "@/components/ApiContext";
 import { AuthDialog } from "@/components/views/auth/AuthDialog";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "wouter";
 
 function Header() {
+  const { currentUser } = useApi();
+
   const headerButtonClasses = "bg-primary rounded-md text-primary-foreground hover:brightness-125";
 
   return (
@@ -10,7 +13,11 @@ function Header() {
       <Link to="/">LOGO</Link>
       <div className="flex">
         <Link to="/surveys/new" className={`${headerButtonClasses} mr-4 p-1`}><FiPlus size="24" /></Link>
-        <AuthDialog triggerClassName={`${headerButtonClasses} text-xs px-2`}/>
+        {currentUser ? (
+          <div>{currentUser.email}</div>
+        ):(
+          <AuthDialog triggerClassName={`${headerButtonClasses} text-xs px-2`}/>
+        )}
       </div>
     </div>
   );
