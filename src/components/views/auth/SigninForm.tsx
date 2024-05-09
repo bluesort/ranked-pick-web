@@ -26,6 +26,7 @@ export function SigninForm({ onComplete }: Props) {
 			if (typeof(err) === 'string') {
 				setError(err);
 			} else {
+				console.error(err);
 				setError('Something went wrong');
 			}
 		} finally {
