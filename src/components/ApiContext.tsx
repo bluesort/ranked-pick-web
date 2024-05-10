@@ -1,6 +1,6 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, useEffect } from 'react';
 
-type Params = { [key: string]: string | boolean };
+type BodyParams = { [key: string]: string | boolean };
 interface CurrentUser {
 	id: number;
 	email: string;
@@ -9,123 +9,115 @@ interface CurrentUser {
 
 interface Context {
 	currentUser: CurrentUser | null;
-	apiGet: (route: string, params?: Params) => Promise<Response>;
-	apiPost: (route: string, params?: Params) => Promise<Response>;
-	apiDelete: (route: string, params?: Params) => Promise<Response>;
-	signin: (params: Params) => Promise<Response>;
-	signup: (params: Params) => Promise<Response>;
-	signout: (params: Params) => Promise<Response>;
+	apiGet: (route: string, params?: { [key: string]: string }) => Promise<Response>;
+	apiPost: (route: string, params?: BodyParams) => Promise<Response>;
+	apiPut: (route: string, params?: BodyParams) => Promise<Response>;
+	apiDelete: (route: string, params?: BodyParams) => Promise<Response>;
+	signin: (params: BodyParams) => Promise<Response>;
+	signup: (params: BodyParams) => Promise<Response>;
+	signout: (params: BodyParams) => Promise<void>;
 }
-
 const ApiContext = React.createContext<Context | undefined>(undefined);
+const defaultHeaders: { [key: string]: string } = {
+	"Accept":"application/json",
+	"Content-Type":"application/json",
+};
 
 export function ApiProvider({children}: {children: React.ReactNode}) {
 	const [currentUser, setCurrentUser] = React.useState<CurrentUser | null>(null);
 	const [accessToken, setAccessToken] = React.useState<string | null>(null);
 
-	console.log(document.cookie);
+	const refreshToken = useCallback(async () => {
+		const resp = await fetch('/api/auth/refresh', {
+			method: 'POST',
+			headers: defaultHeaders,
+			credentials: "include",
+		});
+		const body = await resp.json();
+		if (!resp.ok) {
+			throw(body || 'Unknown error');
+		}
+		setAccessToken(body.access_token.token);
+		setCurrentUser({
+			id: body.user.id as number,
+			email: body.user.email as string,
+			displayName: body.user.display_name as string | null,
+		});
+	}, []);
 
-	const requestHeaders = useCallback(() => {
-		const headers: { [key: string]: string } = {
-			"Accept":"application/json",
-			"Content-Type":"application/json",
-		};
+	const request = useCallback(async (method: string, path: string, bodyParams?: BodyParams) => {
+		const headers = defaultHeaders;
 		if (accessToken) {
 			headers['Authorization'] = 'Bearer ' + accessToken;
 		}
-		return headers;
+		const resp = await fetch('/api' + path, {
+			method: method,
+			headers: headers,
+			body: bodyParams ? JSON.stringify(bodyParams) : null,
+			credentials: "include",
+		});
+		// TODO: refresh token when needed
+		const body = await resp.json();
+		if (!resp.ok) {
+			throw(body || 'Unknown error');
+		}
+		return body;
 	}, [accessToken]);
 
-	// TODO: dry these up
+	useEffect(() => {
+		// TODO: write access token exp to local storage to only refresh when necessary
+		console.log('calling refresh token', refreshToken);
+		refreshToken();
+	}, [refreshToken]);
+
 	const apiGet = useCallback(async (route: string, params?: { [key: string]: string }) => {
 		const path = params ? route + '?' + new URLSearchParams(params) : route;
-		const resp = await fetch('/api/' + path, {
-			method: 'GET',
-			headers: requestHeaders(),
-		});
-		// TODO: refresh token if needed
-		const body = await resp.json();
-		if (!resp.ok) {
-			throw(body || 'Unknown error');
-		}
-		return resp;
-	}, [requestHeaders]);
+		return request('GET', path);
+	}, [request]);
 
-	const apiPost = useCallback(async (route: string, params?: Params) => {
-		const resp = await fetch('/api/' + route, {
-			method: 'POST',
-			headers: requestHeaders(),
-			body: params ? JSON.stringify(params) : null,
-		});
-		// TODO: refresh token if needed
-		const body = await resp.json();
-		if (!resp.ok) {
-			throw(body || 'Unknown error');
-		}
-		return resp;
-	}, [requestHeaders]);
+	const apiPost = useCallback(async (path: string, params?: BodyParams) => {
+		return request('POST', path, params);
+	}, [request]);
 
-	const apiDelete = useCallback(async (route: string, params?: Params) => {
-		const resp = await fetch('/api/' + route, {
-			method: 'DELETE',
-			headers: requestHeaders(),
-			body: params ? JSON.stringify(params) : null,
-		});
-		// TODO: refresh token if needed
-		const body = await resp.json();
-		if (!resp.ok) {
-			throw(body || 'Unknown error');
-		}
-		return resp;
-	}, [requestHeaders]);
+	const apiDelete = useCallback(async (path: string, params?: BodyParams) => {
+		return request('DELETE', path, params);
+	}, [request]);
 
-	const signin = useCallback(async (params: Params) => {
-		const resp = await fetch('/api/auth/signin', {
-			method: 'POST',
-			headers: requestHeaders(),
-			body: JSON.stringify(params),
-		});
-		const body = await resp.json();
-		if (!resp.ok) {
-			throw(body || 'Unknown error');
-		}
-		setRefreshCookie(body.refresh_token.token, body.refresh_token.exp);
-		setAccessToken(body.access_token.token);
+	const apiPut = useCallback(async (path: string, params?: BodyParams) => {
+		return request('PUT', path, params);
+	}, [request]);
+
+	const signin = useCallback(async (params: BodyParams) => {
+		const resp = await request('POST', '/auth/signin', params);
+		setAccessToken(resp.access_token.token);
 		setCurrentUser({
-			id: body.user.id as number,
-			email: body.user.email as string,
-			displayName: body.user.display_name as string | null,
+			id: resp.user.id as number,
+			email: resp.user.email as string,
+			displayName: resp.user.display_name as string | null,
 		});
-		return resp;
-	}, [requestHeaders]);
 
-	const signup = useCallback(async (params: Params) => {
-		const resp = await fetch('/api/auth/signup', {
-			method: 'POST',
-			headers: requestHeaders(),
-			body: JSON.stringify(params),
-		});
-		const body = await resp.json();
-		if (!resp.ok) {
-			throw(body || 'Unknown error');
-		}
-		setRefreshCookie(body.refresh_token.token, body.refresh_token.exp);
-		setAccessToken(body.access_token.token);
+		return resp;
+	}, [request]);
+
+	const signup = useCallback(async (params: BodyParams) => {
+		const resp = await request('POST', '/auth/signup', params);
+		setAccessToken(resp.access_token.token);
 		setCurrentUser({
-			id: body.user.id as number,
-			email: body.user.email as string,
-			displayName: body.user.display_name as string | null,
+			id: resp.user.id as number,
+			email: resp.user.email as string,
+			displayName: resp.user.display_name as string | null,
 		});
 		return resp;
-	}, [requestHeaders]);
+	}, [request]);
 
-	const signout = useCallback(async (params: Params) => {
-		console.log(params);
-		// TODO
-	}, []);
+	const signout = useCallback(async () => {
+		await request('POST', '/auth/signout');
+		setCurrentUser(null);
+		setAccessToken(null);
+	}, [request]);
 
 	return (
-		<ApiContext.Provider value={{ currentUser, apiGet, apiPost, apiDelete, signin, signup, signout }}>
+		<ApiContext.Provider value={{ currentUser, apiGet, apiPost, apiDelete, apiPut, signin, signup, signout }}>
 			{children}
 		</ApiContext.Provider>
 	);
@@ -137,11 +129,4 @@ export function useApi() {
 		throw new Error('useApi must be used within ApiProvider');
 	}
 	return context;
-}
-
-function setRefreshCookie(token: string, expStr: string) {
-	const exp = new Date(expStr);
-	document.cookie = "refresh_token=" + token + "; path=/auth/refresh; SameSite=Lax; expires=" + exp.toUTCString();
-	console.log("set refresh cookie", "refresh_token=" + token + "; path=/auth/refresh; expires=" + exp.toUTCString());
-	console.log(document.cookie);
 }
