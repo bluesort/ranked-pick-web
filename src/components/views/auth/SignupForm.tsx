@@ -49,6 +49,7 @@ export function SignupForm({ onComplete }: Props) {
 		}
 	};
 
+	// TODO: Form component w/ footer
 	return (
 		<form onSubmit={onSubmit} className="[&>*]:mb-4">
 			{error && <p className="text-red-800 mb-4 first-letter:uppercase">{error}</p>}

@@ -1,6 +1,8 @@
 import React, { useContext, useCallback, useEffect } from 'react';
 
+// TODO: Param and response type generation
 type BodyParams = { [key: string]: string | boolean };
+type ResponseObject = { [key: string]: any };
 interface CurrentUser {
 	id: number;
 	email: string;
@@ -9,10 +11,10 @@ interface CurrentUser {
 
 interface Context {
 	currentUser: CurrentUser | null;
-	apiGet: (route: string, params?: { [key: string]: string }) => Promise<Response>;
-	apiPost: (route: string, params?: BodyParams) => Promise<Response>;
-	apiPut: (route: string, params?: BodyParams) => Promise<Response>;
-	apiDelete: (route: string, params?: BodyParams) => Promise<Response>;
+	apiGet: (route: string, params?: { [key: string]: string }) => Promise<ResponseObject>;
+	apiPost: (route: string, params?: BodyParams) => Promise<ResponseObject>;
+	apiPut: (route: string, params?: BodyParams) => Promise<ResponseObject>;
+	apiDelete: (route: string, params?: BodyParams) => Promise<ResponseObject>;
 	signin: (params: BodyParams) => Promise<Response>;
 	signup: (params: BodyParams) => Promise<Response>;
 	signout: (params: BodyParams) => Promise<void>;
@@ -37,38 +39,51 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 		if (!resp.ok) {
 			throw(body || 'Unknown error');
 		}
-		setAccessToken(body.access_token.token);
+		const token = body.access_token.token;
+		setAccessToken(token);
 		setCurrentUser({
 			id: body.user.id as number,
 			email: body.user.email as string,
 			displayName: body.user.display_name as string | null,
 		});
+		return token;
 	}, []);
 
 	const request = useCallback(async (method: string, path: string, bodyParams?: BodyParams) => {
-		const headers = defaultHeaders;
-		if (accessToken) {
-			headers['Authorization'] = 'Bearer ' + accessToken;
+		try {
+			let token = accessToken;
+			if (!accessToken) {
+				token = await refreshToken();
+			}
+
+			const headers = defaultHeaders;
+			if (accessToken) {
+				headers['Authorization'] = 'Bearer ' + token;
+			}
+			const resp = await fetch('/api' + path, {
+				method: method,
+				headers: headers,
+				body: bodyParams ? JSON.stringify(bodyParams) : null,
+				credentials: "include",
+			});
+			// TODO: refresh token when needed
+			const body = await resp.json();
+			if (!resp.ok) {
+				throw(body || 'Unknown error');
+			}
+			return body;
+		} catch (err) {
+			console.error(err);
+			throw(err);
 		}
-		const resp = await fetch('/api' + path, {
-			method: method,
-			headers: headers,
-			body: bodyParams ? JSON.stringify(bodyParams) : null,
-			credentials: "include",
-		});
-		// TODO: refresh token when needed
-		const body = await resp.json();
-		if (!resp.ok) {
-			throw(body || 'Unknown error');
-		}
-		return body;
-	}, [accessToken]);
+	}, [accessToken, refreshToken]);
 
 	useEffect(() => {
-		// TODO: write access token exp to local storage to only refresh when necessary
-		console.log('calling refresh token', refreshToken);
-		refreshToken();
-	}, [refreshToken]);
+		// TODO: Fix double call
+		if (!accessToken) {
+			refreshToken();
+		}
+	}, [accessToken, refreshToken]);
 
 	const apiGet = useCallback(async (route: string, params?: { [key: string]: string }) => {
 		const path = params ? route + '?' + new URLSearchParams(params) : route;

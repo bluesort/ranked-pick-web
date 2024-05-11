@@ -1,4 +1,4 @@
-function Home() {
+export function Home() {
   return (
     <div className="flex flex-col items-center">
       <p className="font-bold my-4">This app is a work in progress.</p>
@@ -7,5 +7,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;
