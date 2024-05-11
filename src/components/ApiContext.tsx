@@ -1,7 +1,7 @@
 import React, { useContext, useCallback, useEffect } from 'react';
 
 // TODO: Param and response type generation
-type BodyParams = { [key: string]: string | boolean };
+type BodyParams = { [key: string]: any };
 type ResponseObject = { [key: string]: any };
 interface CurrentUser {
 	id: number;
@@ -59,15 +59,15 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 		}
 	}, [accessToken]);
 
-	const request = useCallback(async (method: string, path: string, bodyParams?: BodyParams) => {
+	const request = useCallback(async (method: string, path: string, bodyParams?: BodyParams, useAccessToken = true) => {
 		try {
 			let token = accessToken;
-			if (!accessToken) {
+			if (useAccessToken && !accessToken) {
 				token = await refreshToken();
 			}
 
 			const headers = defaultHeaders;
-			if (token) {
+			if (useAccessToken && token) {
 				headers['Authorization'] = 'Bearer ' + token;
 			}
 			const resp = await fetch('/api' + path, {
@@ -112,7 +112,7 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 	}, [request]);
 
 	const signin = useCallback(async (params: BodyParams) => {
-		const resp = await request('POST', '/auth/signin', params);
+		const resp = await request('POST', '/auth/signin', params, false);
 		setAccessToken(resp.access_token.token);
 		setCurrentUser({
 			id: resp.user.id as number,
@@ -124,7 +124,7 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 	}, [request]);
 
 	const signup = useCallback(async (params: BodyParams) => {
-		const resp = await request('POST', '/auth/signup', params);
+		const resp = await request('POST', '/auth/signup', params, false);
 		setAccessToken(resp.access_token.token);
 		setCurrentUser({
 			id: resp.user.id as number,
@@ -135,7 +135,7 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 	}, [request]);
 
 	const signout = useCallback(async () => {
-		await request('POST', '/auth/signout');
+		await request('POST', '/auth/signout', {}, false);
 		setCurrentUser(null);
 		setAccessToken(null);
 	}, [request]);

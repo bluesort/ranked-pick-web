@@ -99,7 +99,7 @@ export function SignupForm({ onComplete }: Props) {
 			</div>
 
 			<div className="flex justify-end mt-4">
-				<Button type="button" onClick={onComplete} className="mr-2">Cancel</Button>
+				<Button onClick={onComplete} className="mr-2">Cancel</Button>
 				<Button type="submit" className="w-20">
 						{loading ? <Spinner /> : "Submit"}
 				</Button>

@@ -7,39 +7,30 @@ export function ViewSurvey() {
   const { apiGet } = useApi();
   // const [loading, setLoading] = useState(false);
 	const [survey, setSurvey] = useState<any>(null);
-  // const [surveyOptions, setSurveyOptions] = useState(survey.options ?? []);
+  const [surveyOptions, setSurveyOptions] = useState<string[]>([]);
 
 	const fetchSurvey = useCallback(async (id: number) => {
-		const survey = await apiGet(`/surveys/${id}`);
-		setSurvey(survey);
+		const surveyResp = await apiGet(`/surveys/${id}`);
+		setSurvey(surveyResp);
 	}, [apiGet]);
+
+  const fetchSurveyOptions = useCallback(async (surveyId: number) => {
+    const optionsResp = await apiGet(`/surveys/${surveyId}/options`);
+    setSurveyOptions(optionsResp as string[]);
+  }, [apiGet]);
 
 	// TODO: Fix double fetch
 	useEffect(() => {
 		if (routeParams?.id && !survey) {
 			try {
-				fetchSurvey(Number(routeParams.id));
+        const surveyId = Number(routeParams.id);
+				fetchSurvey(surveyId);
+        fetchSurveyOptions(surveyId);
 			} catch (err) {
 				console.error(err);
 			}
 		}
-	}, [fetchSurvey, routeParams?.id, survey]);
-
-  // const onOptionChange = (index: number, newOption: string) => {
-  //   const optionsCopy = [...surveyOptions];
-  //   optionsCopy[index] = newOption;
-  //   setSurveyOptions(optionsCopy);
-  // };
-
-  // const onOptionAdd = () => {
-  //   setSurveyOptions([...surveyOptions, ""]);
-  // };
-
-  // const onOptionDelete = (index: number) => {
-  //   const optionsCopy = [...surveyOptions];
-  //   optionsCopy.splice(index, 1);
-  //   setSurveyOptions(optionsCopy);
-  // };
+	}, [fetchSurvey, fetchSurveyOptions, routeParams?.id, survey]);
 
   // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
@@ -56,6 +47,9 @@ export function ViewSurvey() {
   return (
     <div>
 			survey view {survey?.title}
+      {surveyOptions.map((option, index) => (
+        <div key={index}>{option}</div>
+      ))}
 		</div>
   );
 }

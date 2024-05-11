@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Spinner } from "@/components/ui/Spinner";
 import { Textarea } from "@/components/ui/TextArea";
+import { ManageOptions } from "@/components/views/surveys/ManageOptions";
 import { useState } from "react";
 import { useLocation } from "wouter";
 
@@ -14,6 +15,7 @@ export function NewSurvey() {
 	const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [options, setOptions] = useState<string[]>([]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +24,7 @@ export function NewSurvey() {
       const resp = await apiPost('/surveys', {
         title: title,
         description: description,
+        options: options,
       });
       setLocation(`/surveys/${resp.ID}`);
     } catch (err) {
@@ -62,9 +65,12 @@ export function NewSurvey() {
           className="resize-none"
         />
 
+        <Label htmlFor="options" className="mb-1">Options</Label>
+        <ManageOptions options={options} onUpdateOptions={setOptions} />
+
         <div className="flex justify-end mt-4">
           <Button type="submit" className="w-20">
-              {loading ? <Spinner /> : "Create"}
+            {loading ? <Spinner /> : "Create"}
           </Button>
         </div>
       </form>
