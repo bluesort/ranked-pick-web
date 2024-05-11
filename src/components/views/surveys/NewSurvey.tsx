@@ -17,8 +17,6 @@ export function NewSurvey() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('submit');
-
     setLoading(true);
     try {
       const resp = await apiPost('/surveys', {

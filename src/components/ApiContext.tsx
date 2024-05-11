@@ -19,6 +19,8 @@ interface Context {
 	signup: (params: BodyParams) => Promise<Response>;
 	signout: (params: BodyParams) => Promise<void>;
 }
+
+let refreshingToken = false;
 const ApiContext = React.createContext<Context | undefined>(undefined);
 const defaultHeaders: { [key: string]: string } = {
 	"Accept":"application/json",
@@ -30,24 +32,32 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 	const [accessToken, setAccessToken] = React.useState<string | null>(null);
 
 	const refreshToken = useCallback(async () => {
-		const resp = await fetch('/api/auth/refresh', {
-			method: 'POST',
-			headers: defaultHeaders,
-			credentials: "include",
-		});
-		const body = await resp.json();
-		if (!resp.ok) {
-			throw(body || 'Unknown error');
+		try {
+			refreshingToken = true;
+			const resp = await fetch('/api/auth/refresh', {
+				method: 'POST',
+				headers: defaultHeaders,
+				credentials: "include",
+			});
+			const body = await resp.json();
+			if (!resp.ok) {
+				throw(body || 'Unknown error');
+			}
+			const token = body.access_token.token;
+			setAccessToken(token);
+			setCurrentUser({
+				id: body.user.id as number,
+				email: body.user.email as string,
+				displayName: body.user.display_name as string | null,
+			});
+			return token;
+		} catch (err) {
+			console.error(err);
+			throw(err);
+		} finally {
+			refreshingToken = false;
 		}
-		const token = body.access_token.token;
-		setAccessToken(token);
-		setCurrentUser({
-			id: body.user.id as number,
-			email: body.user.email as string,
-			displayName: body.user.display_name as string | null,
-		});
-		return token;
-	}, []);
+	}, [accessToken]);
 
 	const request = useCallback(async (method: string, path: string, bodyParams?: BodyParams) => {
 		try {
@@ -57,7 +67,7 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 			}
 
 			const headers = defaultHeaders;
-			if (accessToken) {
+			if (token) {
 				headers['Authorization'] = 'Bearer ' + token;
 			}
 			const resp = await fetch('/api' + path, {
@@ -79,8 +89,7 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 	}, [accessToken, refreshToken]);
 
 	useEffect(() => {
-		// TODO: Fix double call
-		if (!accessToken) {
+		if (!accessToken && !refreshingToken) {
 			refreshToken();
 		}
 	}, [accessToken, refreshToken]);

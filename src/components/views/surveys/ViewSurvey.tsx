@@ -11,15 +11,13 @@ export function ViewSurvey() {
 
 	const fetchSurvey = useCallback(async (id: number) => {
 		const survey = await apiGet(`/surveys/${id}`);
-		console.log(survey);
 		setSurvey(survey);
 	}, [apiGet]);
 
-	// TODO: why does this fire twice?
+	// TODO: Fix double fetch
 	useEffect(() => {
 		if (routeParams?.id && !survey) {
 			try {
-				console.log('fetching survey');
 				fetchSurvey(Number(routeParams.id));
 			} catch (err) {
 				console.error(err);
