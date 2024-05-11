@@ -77,7 +77,12 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 				credentials: "include",
 			});
 			// TODO: refresh token when needed
-			const body = await resp.json();
+			let body = {};
+			try {
+				body = await resp.json();
+			} catch {
+				// TODO: handle non-json responses
+			}
 			if (!resp.ok) {
 				throw(body || 'Unknown error');
 			}

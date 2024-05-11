@@ -17,7 +17,7 @@ export function NewSurvey() {
   const [description, setDescription] = useState("");
   const [options, setOptions] = useState<string[]>([]);
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -26,7 +26,7 @@ export function NewSurvey() {
         description: description,
         options: options,
       });
-      setLocation(`/surveys/${resp.ID}`);
+      setLocation(`/surveys/${resp.id}/vote`);
     } catch (err) {
 			if (typeof(err) === 'string') {
 				setError(err);
