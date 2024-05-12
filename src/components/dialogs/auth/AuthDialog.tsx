@@ -1,20 +1,18 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/Dialog";
-import { SigninForm } from "@/components/views/auth/SigninForm";
-import { SignupForm } from "@/components/views/auth/SignupForm";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/Dialog";
+import { SigninForm } from "@/components/dialogs/auth/SigninForm";
+import { SignupForm } from "@/components/dialogs/auth/SignupForm";
 
 interface Props {
-  triggerClassName: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export function AuthDialog({ triggerClassName }: Props) {
-  const [open, setOpen] = useState(false);
+export function AuthDialog({ open, onOpenChange }: Props) {
   const [isSigningUp, setIsSigningUp] = useState(false);
-  // const [error, setError] = useState<string | null>(null);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger onClick={() => setOpen(true)} className={triggerClassName}>Sign in</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <h3>{isSigningUp ? "Sign up" : "Sign in"}</h3>

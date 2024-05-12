@@ -17,7 +17,7 @@ interface Context {
 	apiDelete: (route: string, params?: BodyParams) => Promise<ResponseObject>;
 	signin: (params: BodyParams) => Promise<Response>;
 	signup: (params: BodyParams) => Promise<Response>;
-	signout: (params: BodyParams) => Promise<void>;
+	signout: () => Promise<void>;
 }
 
 let refreshingToken = false;
@@ -57,9 +57,9 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 		} finally {
 			refreshingToken = false;
 		}
-	}, [accessToken]);
+	}, []);
 
-	const request = useCallback(async (method: string, path: string, bodyParams?: BodyParams, useAccessToken = true) => {
+	const request = useCallback(async (method: string, path: string, bodyParams?: BodyParams, useAccessToken = true): Promise<any> => {
 		try {
 			let token = accessToken;
 			if (useAccessToken && !accessToken) {
@@ -140,7 +140,7 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 	}, [request]);
 
 	const signout = useCallback(async () => {
-		await request('POST', '/auth/signout', {}, false);
+		await request('POST', '/auth/signout', undefined, false);
 		setCurrentUser(null);
 		setAccessToken(null);
 	}, [request]);
