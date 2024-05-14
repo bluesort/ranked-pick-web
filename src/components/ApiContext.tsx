@@ -41,7 +41,9 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 			});
 			const body = await resp.json();
 			if (!resp.ok) {
-				throw(body || 'Unknown error');
+				setCurrentUser(null);
+				setAccessToken(null);
+				throw(body?.error || 'Could not authenticate');
 			}
 			const token = body.access_token.token;
 			setAccessToken(token);
@@ -52,7 +54,9 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 			});
 			return token;
 		} catch (err) {
-			console.error(err);
+			setCurrentUser(null);
+			setAccessToken(null);
+			console.error('Auth refresh error', err);
 			throw(err);
 		} finally {
 			refreshingToken = false;
@@ -76,19 +80,22 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 				body: bodyParams ? JSON.stringify(bodyParams) : null,
 				credentials: "include",
 			});
-			// TODO: refresh token when needed
-			let body = {};
+			if (resp.status === 401) {
+				await refreshToken();
+				return request(method, path, bodyParams);
+			}
+			let body: any = {};
 			try {
 				body = await resp.json();
 			} catch {
 				// TODO: handle non-json responses
 			}
 			if (!resp.ok) {
-				throw(body || 'Unknown error');
+				throw(body?.error || 'Unknown error');
 			}
 			return body;
 		} catch (err) {
-			console.error(err);
+			console.error('API error', err);
 			throw(err);
 		}
 	}, [accessToken, refreshToken]);
@@ -145,6 +152,7 @@ export function ApiProvider({children}: {children: React.ReactNode}) {
 		setAccessToken(null);
 	}, [request]);
 
+	// TODO: Display auth dialog when unauthed api request is made
 	return (
 		<ApiContext.Provider value={{ currentUser, apiGet, apiPost, apiDelete, apiPut, signin, signup, signout }}>
 			{children}
