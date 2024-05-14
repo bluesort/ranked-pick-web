@@ -1,7 +1,8 @@
 import { Home } from "@/components/views/home/Home";
 import { NewSurvey } from "@/components/views/surveys/NewSurvey";
 import { SurveyDetails } from "@/components/views/surveys/SurveyDetails";
-import { VoteOnSurvey } from "@/components/views/surveys/VoteOnSurvey";
+import { Respond } from "@/components/views/surveys/Respond";
+import { ResponseThanks } from "@/components/views/surveys/ResponseThanks";
 import { Route, Switch } from "wouter";
 
 function Routes() {
@@ -11,7 +12,8 @@ function Routes() {
 
       <Route path="/surveys/new" component={NewSurvey} />
       <Route path="/surveys/:id" component={SurveyDetails} />
-      <Route path="/surveys/:id/vote" component={VoteOnSurvey} />
+      <Route path="/surveys/:id/respond" component={Respond} />
+      <Route path="/surveys/:id/thanks" component={ResponseThanks} />
 
       <Route>404 Placeholder</Route>
     </Switch>

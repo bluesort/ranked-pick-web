@@ -1,16 +1,15 @@
 import { useApi } from "@/components/ApiContext";
+import Page from "@/components/layout/Page";
 import { Button } from "@/components/ui/Button";
+import { Form } from "@/components/ui/form/Form";
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "wouter";
 
-export function VoteOnSurvey() {
+export function Respond() {
 	const routeParams = useParams();
   const { apiGet, apiPost } = useApi();
 	const [survey, setSurvey] = useState<any>(null);
   const [surveyOptions, setSurveyOptions] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [voted, setVoted] = useState(false);
-  // TODO: loading state
 
 	const fetchSurvey = useCallback(async (id: number) => {
 		const surveyResp = await apiGet(`/surveys/${id}`);
@@ -39,19 +38,9 @@ export function VoteOnSurvey() {
   };
 
   const handleSubmit = async () => {
-    try {
-      await apiPost(`/surveys/${survey.id}/vote`, {
-        options: surveyOptions.map(o => o.id),
-      });
-      setVoted(true);
-    } catch (err) {
-      if (typeof(err) === 'string') {
-        setError(err);
-      } else {
-        console.error(err);
-        setError('Something went wrong');
-      }
-    }
+    await apiPost(`/surveys/${survey.id}/vote`, {
+      options: surveyOptions.map(o => o.id),
+    });
   };
 
 	// TODO: Fix double fetch
@@ -67,16 +56,10 @@ export function VoteOnSurvey() {
 		}
 	}, [fetchSurvey, fetchSurveyOptions, routeParams?.id, survey]);
 
-  // TODO: Use form
   return (
-    <div>
-      <h1 className="mb-4">{survey?.title}</h1>
-      {voted ? (
-        <div>Thank you for voting</div>
-      ):(
-        <div>
-          {error && <p className="text-red-800 mb-4 first-letter:uppercase">{error}</p>}
-          {/* TODO: show results */}
+    <Page title={survey?.title}>
+      {surveyOptions?.length ? (
+        <Form onSubmit={handleSubmit} submitLabel="Vote">
           {surveyOptions.map((option, index) => (
             <div key={index} className="[&>*]:mb-2 flex items-center">
               <Button onClick={() => handleMoveOptionUp(index)} className="mr-1">Up</Button>
@@ -85,9 +68,10 @@ export function VoteOnSurvey() {
             </div>
           ))}
           <div className="font-semibold my-4">You will not be able to change your submission once you vote.</div>
-          <Button onClick={handleSubmit}>Vote</Button>
-        </div>
+        </Form>
+      ):(
+        <div>This survey cannot be responded to yet.</div>
       )}
-		</div>
+		</Page>
   );
 }

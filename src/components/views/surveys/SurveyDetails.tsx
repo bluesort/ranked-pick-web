@@ -1,4 +1,5 @@
 import { useApi } from "@/components/ApiContext";
+import Page from "@/components/layout/Page";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "wouter";
 
@@ -31,11 +32,10 @@ export function SurveyDetails() {
 				console.error(err);
 			}
 		}
-	}, [fetchSurveyResult, routeParams?.id, results]);
+	}, [fetchSurveyResult, fetchSurvey, results, routeParams?.id]);
 
 	return (
-		<div>
-			<h1 className="mb-4">{survey?.title}</h1>
+		<Page title={survey?.title}>
 			<div className="mb-4">{voteCount} votes</div>
 			Best
 			<br /><br />
@@ -49,6 +49,6 @@ export function SurveyDetails() {
 			)}
 			<br />
 			Worst
-		</div>
+		</Page>
 	);
 }

@@ -1,4 +1,5 @@
 import { useApi } from "@/components/ApiContext";
+import Page from "@/components/layout/Page";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -26,7 +27,7 @@ export function NewSurvey() {
         description: description,
         options: options,
       });
-      setLocation(`/surveys/${resp.id}/vote`);
+      setLocation(`/surveys/${resp.id}/respond`);
     } catch (err) {
 			if (typeof(err) === 'string') {
 				setError(err);
@@ -39,11 +40,8 @@ export function NewSurvey() {
 		}
   };
 
-  // TODO: Page component for root of route views
   return (
-    <div className="min-w-80">
-      <h1 className="mb-2">New Survey</h1>
-
+    <Page title="New Survey">
       <form onSubmit={onSubmit} className="[&>*]:mb-4">
         {error && <p className="text-red-800 mb-4 first-letter:uppercase">{error}</p>}
 
@@ -74,6 +72,6 @@ export function NewSurvey() {
           </Button>
         </div>
       </form>
-    </div>
+    </Page>
   );
 }

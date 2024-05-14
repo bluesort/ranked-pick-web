@@ -14,7 +14,7 @@ export function ActionMenu({ triggerClassName }: Props) {
 	const handleMenuSelect = useCallback(async (selectedItem: string) => {
 		switch (selectedItem) {
 			case 'new_survey':
-				setLocation('/profile');
+				setLocation('/surveys/new');
 				break;
 			default:
 				console.error('Unknown auth menu item selected: ', selectedItem);
