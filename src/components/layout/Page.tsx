@@ -1,11 +1,11 @@
 import clsx from "clsx";
 
-type Props = {
+interface Props {
 	children: React.ReactNode;
 	title?: string | React.ReactNode;
 	center?: boolean;
 	className?: string;
-};
+}
 
 
 export default function Page({ children, title, center, className }: Props) {

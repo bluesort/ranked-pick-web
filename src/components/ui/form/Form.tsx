@@ -4,7 +4,7 @@ import { Spinner } from "@/components/ui/Spinner";
 import { capitalize } from "@/lib/utils";
 import { useCallback, useState } from "react";
 
-type FormProps = {
+interface Props {
 	children: React.ReactNode;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 	error?: string;
@@ -12,7 +12,7 @@ type FormProps = {
 	submitLabel?: string;
 }
 
-export function Form({ children, onSubmit, error, onCancel, submitLabel = 'Submit' }: FormProps) {
+export function Form({ children, onSubmit, error, onCancel, submitLabel = 'Submit' }: Props) {
 	const [loading, setLoading] = useState(false);
 	const [apiError, setApiError] = useState<string | null>(null);
 
@@ -25,6 +25,7 @@ export function Form({ children, onSubmit, error, onCancel, submitLabel = 'Submi
 		setLoading(true);
 		try {
 			await onSubmit(e);
+			setApiError(null);
 		} catch (err) {
 			if (typeof(err) === 'string') {
 				setApiError(err);

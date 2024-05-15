@@ -1,7 +1,7 @@
 import { Home } from "@/components/views/home/Home";
 import { NewSurvey } from "@/components/views/surveys/NewSurvey";
 import { SurveyDetails } from "@/components/views/surveys/SurveyDetails";
-import { Respond } from "@/components/views/surveys/Respond";
+import { Respond } from "@/components/views/surveys/respond/Respond";
 import { ResponseThanks } from "@/components/views/surveys/ResponseThanks";
 import { Route, Switch } from "wouter";
 

@@ -7,7 +7,7 @@ import { FiUserCheck, FiUserX } from "react-icons/fi";
 import { useCallback, useState } from "react";
 import { useLocation } from "wouter";
 
-type Props = {
+interface Props {
 	triggerClassName?: string;
 }
 
@@ -46,6 +46,7 @@ export function AuthMenu({ triggerClassName }: Props) {
 					<Button
 						onClick={() => setAuthDialogOpen(true)}
 						className={clsx(triggerClassName)}
+						variant="ghost"
 					>
 						<FiUserX size="20" />
 					</Button>

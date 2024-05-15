@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import { useLocation } from "wouter";
 
-type Props = {
+interface Props {
 	triggerClassName?: string;
 }
 

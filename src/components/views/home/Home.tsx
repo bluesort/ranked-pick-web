@@ -9,8 +9,13 @@ export function Home() {
         <h1>Ranked Pick</h1>
       </div>
     )}>
-      <p>Create and share ranked-choice surveys.</p>
-      <p className="font-bold mt-4">This app is a work in progress.</p>
+      <p className="mb-4">
+        Create and share ranked-choice surveys.
+      </p>
+      <p className="mb-4">
+				Created by <a href="https://github.com/carterjackson" target="_blank">Carter Jackson</a>
+			</p>
+      <p className="font-bold">This app is a work in progress.</p>
     </Page>
   );
 }
