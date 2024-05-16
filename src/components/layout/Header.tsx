@@ -1,11 +1,11 @@
 import { Link } from "wouter";
 import logo from "@/assets/logo.svg";
 import { ActionMenu } from "@/components/layout/ActionMenu";
-import { AuthMenu } from "@/components/layout/AuthMenu";
-import { useApi } from "@/components/ApiContext";
+import { AccountMenu } from "@/components/layout/AccountMenu";
+import { useAuth } from "@/components/AuthContext";
 
 function Header() {
-  const { currentUser } = useApi();
+  const { currentUser } = useAuth();
   const headerButtonClasses = "bg-primary rounded-md text-primary-foreground hover:brightness-125 px-2 py-1";
 
   return (
@@ -15,7 +15,7 @@ function Header() {
       </Link>
       <div className="flex">
         {currentUser && <ActionMenu triggerClassName={headerButtonClasses} />}
-        <AuthMenu triggerClassName={headerButtonClasses} />
+        <AccountMenu triggerClassName={headerButtonClasses} />
       </div>
     </div>
   );

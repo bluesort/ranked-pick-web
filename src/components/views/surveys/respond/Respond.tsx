@@ -1,18 +1,19 @@
-import { useApi } from "@/components/ApiContext";
-import Page from "@/components/layout/Page";
+import { Page } from "@/components/layout/Page";
 import { VoteForm } from "@/components/views/surveys/respond/VoteForm";
+import { getApiClient } from "@/lib/api_client";
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "wouter";
 
+const api = getApiClient();
+
 export function Respond() {
 	const routeParams = useParams();
-  const { apiGet } = useApi();
 	const [survey, setSurvey] = useState<any>(null);
 
 	const fetchSurvey = useCallback(async (id: number) => {
-		const surveyResp = await apiGet(`/surveys/${id}`);
+		const surveyResp = await api.get(`/surveys/${id}`);
 		setSurvey(surveyResp);
-	}, [apiGet]);
+	}, []);
 
 	// TODO: Fix double fetch
 	useEffect(() => {

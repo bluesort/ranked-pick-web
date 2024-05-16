@@ -1,27 +1,28 @@
-import { useApi } from "@/components/ApiContext";
 import { Form } from "@/components/ui/form/Form";
 import { useCallback, useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd';
 import { Button } from "@/components/ui/Button";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useLocation } from "wouter";
+import { getApiClient } from "@/lib/api_client";
 
 interface Props {
 	survey: any;
 }
 
+const api = getApiClient();
+
 export function VoteForm({ survey }: Props) {
-	const { apiGet, apiPost } = useApi();
   const [, setLocation] = useLocation();
-	const [surveyOptions, setSurveyOptions] = useState<any[]>([]);
+	const [surveyOptions, setSurveyOptions] = useState<any[] | null>(null);
 
 	const fetchSurveyOptions = useCallback(async (surveyId: number) => {
-    const optionsResp = await apiGet(`/surveys/${surveyId}/options`);
+    const optionsResp = await api.get(`/surveys/${surveyId}/options`);
     setSurveyOptions(optionsResp as any[]);
-  }, [apiGet]);
+  }, []);
 
 	useEffect(() => {
-		if (survey?.id && !surveyOptions?.length) {
+		if (survey?.id && !surveyOptions) {
 			try {
 				fetchSurveyOptions(survey.id);
 			} catch (err) {
@@ -33,7 +34,7 @@ export function VoteForm({ survey }: Props) {
 	if (!survey) { return null; }
 
   const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) { return; }
+    if (!surveyOptions || !result.destination) { return; }
     const newOptions = [...surveyOptions];
     newOptions.splice(result.source.index, 1);
     newOptions.splice(result.destination.index, 0, surveyOptions[result.source.index]);
@@ -41,7 +42,7 @@ export function VoteForm({ survey }: Props) {
   };
 
 	const handleMoveOptionUp = (optionsIndex: number) => {
-    if (optionsIndex == 0) { return; }
+    if (!surveyOptions || optionsIndex == 0) { return; }
     const newOptions = [...surveyOptions];
     newOptions[optionsIndex - 1] = surveyOptions[optionsIndex];
     newOptions[optionsIndex] = surveyOptions[optionsIndex - 1];
@@ -49,7 +50,7 @@ export function VoteForm({ survey }: Props) {
   };
 
   const handleMoveOptionDown = (optionsIndex: number) => {
-    if (optionsIndex == surveyOptions.length - 1) { return; }
+    if (!surveyOptions || optionsIndex == surveyOptions.length - 1) { return; }
     const newOptions = [...surveyOptions];
     newOptions[optionsIndex + 1] = surveyOptions[optionsIndex];
     newOptions[optionsIndex] = surveyOptions[optionsIndex + 1];
@@ -57,8 +58,8 @@ export function VoteForm({ survey }: Props) {
   };
 
   const handleSubmit = async () => {
-    await apiPost(`/surveys/${survey.id}/vote`, {
-      options: surveyOptions.map((o: any) => o.id),
+    await api.post(`/surveys/${survey.id}/vote`, {
+      options: surveyOptions?.map((o: any) => o.id),
     });
     setLocation(`/surveys/${survey.id}/thanks`);
   };
@@ -75,7 +76,7 @@ export function VoteForm({ survey }: Props) {
         <Droppable droppableId="placeholder">
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {surveyOptions.map((option: any, index: number) => (
+              {surveyOptions?.map((option: any, index: number) => (
                 <VoteOption
                   key={option.id}
                   option={option}

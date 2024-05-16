@@ -1,20 +1,18 @@
-import { useApi } from "@/components/ApiContext";
-import { AuthDialog } from "@/components/dialogs/auth/AuthDialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/DropdownMenu";
 import { Button } from "@/components/ui/Button";
 import clsx from "clsx";
 import { FiUserCheck, FiUserX } from "react-icons/fi";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useLocation } from "wouter";
+import { useAuth } from "@/components/AuthContext";
 
 interface Props {
 	triggerClassName?: string;
 }
 
-export function AuthMenu({ triggerClassName }: Props) {
-	const { currentUser, signout } = useApi();
+export function AccountMenu({ triggerClassName }: Props) {
+	const { currentUser, signout } = useAuth();
 	const [, setLocation] = useLocation();
-	const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
 	const handleMenuSelect = useCallback(async (selectedItem: string) => {
 		switch (selectedItem) {
@@ -30,7 +28,7 @@ export function AuthMenu({ triggerClassName }: Props) {
 	}, [setLocation, signout]);
 
 	return (
-		<div>
+		<>
 			{currentUser ? (
 				<DropdownMenu>
 					<DropdownMenuTrigger className={clsx(triggerClassName)}>
@@ -44,15 +42,14 @@ export function AuthMenu({ triggerClassName }: Props) {
 			):(
 				<>
 					<Button
-						onClick={() => setAuthDialogOpen(true)}
+						// onClick={showAuthDialog} // TODO
 						className={clsx(triggerClassName)}
 						variant="ghost"
 					>
 						<FiUserX size="20" />
 					</Button>
-					<AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} />
 				</>
 			)}
-		</div>
+		</>
 	);
 }

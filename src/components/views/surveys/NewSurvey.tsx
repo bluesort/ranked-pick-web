@@ -1,16 +1,17 @@
-import { useApi } from "@/components/ApiContext";
-import Page from "@/components/layout/Page";
+import { Page } from "@/components/layout/Page";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Spinner } from "@/components/ui/Spinner";
 import { Textarea } from "@/components/ui/TextArea";
 import { ManageOptions } from "@/components/views/surveys/ManageOptions";
+import { getApiClient } from "@/lib/api_client";
 import { useState } from "react";
 import { useLocation } from "wouter";
 
+const api = getApiClient();
+
 export function NewSurvey() {
-  const { apiPost } = useApi();
   const [, setLocation] = useLocation();
   const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
@@ -22,7 +23,7 @@ export function NewSurvey() {
     e.preventDefault();
     setLoading(true);
     try {
-      const resp = await apiPost('/surveys', {
+      const resp = await api.post('/surveys', {
         title: title,
         description: description,
         options: options,

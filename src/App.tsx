@@ -1,11 +1,11 @@
-import { ApiProvider } from '@/components/ApiContext';
+import { AuthProvider } from '@/components/AuthContext';
 import AppLayout from '@/components/layout/AppLayout';
 
 function App() {
   return (
-    <ApiProvider>
+    <AuthProvider>
       <AppLayout />
-    </ApiProvider>
+    </AuthProvider>
   );
 }
 

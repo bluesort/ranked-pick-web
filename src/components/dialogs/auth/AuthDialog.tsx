@@ -5,28 +5,28 @@ import { SignupForm } from "@/components/dialogs/auth/SignupForm";
 
 interface Props {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  handleOpenChange: (open: boolean) => void;
 }
 
-export function AuthDialog({ open, onOpenChange }: Props) {
+export function AuthDialog({ open, handleOpenChange }: Props) {
   const [isSigningUp, setIsSigningUp] = useState(false);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
           <h3>{isSigningUp ? "Sign up" : "Sign in"}</h3>
         </DialogHeader>
         {isSigningUp ? (
           <>
-            <SignupForm onComplete={() => setOpen(false)} />
+            <SignupForm onComplete={() => handleOpenChange(false)} />
             <p className="text-center">
               Already have an account? <button onClick={() => setIsSigningUp(false)} className="underline">Sign in</button>
             </p>
           </>
         ):(
           <>
-            <SigninForm onComplete={() => setOpen(false)} />
+            <SigninForm onComplete={() => handleOpenChange(false)} />
             <p className="text-center">
               Don't have an account? <button onClick={() => setIsSigningUp(true)} className="underline">Sign up</button>
             </p>

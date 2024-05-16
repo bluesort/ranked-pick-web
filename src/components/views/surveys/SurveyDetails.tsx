@@ -1,26 +1,26 @@
-import { useApi } from "@/components/ApiContext";
-import Page from "@/components/layout/Page";
+import { Page } from "@/components/layout/Page";
+import { getApiClient } from "@/lib/api_client";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "wouter";
 
+const api = getApiClient();
 
 export function SurveyDetails() {
 	const routeParams = useParams();
 	const [voteCount, setVoteCount] = useState(0);
 	const [survey, setSurvey] = useState<any | null>(null);
 	const [results, setResults] = useState<any[] | null>(null);
-	const { apiGet } = useApi();
 
 	const fetchSurvey = useCallback(async (id: number) => {
-		const surveyResp = await apiGet(`/surveys/${id}`);
+		const surveyResp = await api.get(`/surveys/${id}`);
 		setSurvey(surveyResp);
-	}, [apiGet]);
+	}, []);
 
 	const fetchSurveyResult = useCallback(async (id: number) => {
-		const resultsResp = await apiGet(`/surveys/${id}/results`);
-		setVoteCount(resultsResp.response_count);
-		setResults(resultsResp.option_results);
-	}, [apiGet]);
+		const resultsResp = await api.get(`/surveys/${id}/results`);
+		setVoteCount(resultsResp?.response_count || 0);
+		setResults(resultsResp?.option_results);
+	}, []);
 
 	useEffect(() => {
 		if (routeParams?.id && !results) {

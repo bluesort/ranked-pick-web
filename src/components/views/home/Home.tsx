@@ -1,5 +1,5 @@
 import logo from "@/assets/logo.svg";
-import Page from "@/components/layout/Page";
+import { Page } from "@/components/layout/Page";
 
 export function Home() {
   return (
