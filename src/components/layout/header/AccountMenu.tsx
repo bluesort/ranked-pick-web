@@ -5,6 +5,7 @@ import { FiUserCheck, FiUserX } from "react-icons/fi";
 import { useCallback } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/components/AuthContext";
+import { authenticatePath } from "@/components/views/authenticate/utils";
 
 interface Props {
 	triggerClassName?: string;
@@ -12,7 +13,11 @@ interface Props {
 
 export function AccountMenu({ triggerClassName }: Props) {
 	const { currentUser, signout } = useAuth();
-	const [, setLocation] = useLocation();
+	const [location, setLocation] = useLocation();
+
+	const handleAuthenticate = useCallback(() => {
+		setLocation(authenticatePath(location));
+	}, [location, setLocation]);
 
 	const handleMenuSelect = useCallback(async (selectedItem: string) => {
 		switch (selectedItem) {
@@ -21,6 +26,7 @@ export function AccountMenu({ triggerClassName }: Props) {
 				break;
 			case 'signout':
 				await signout();
+				// TODO: Show toast on signout
 				break;
 			default:
 				console.error('Unknown auth menu item selected: ', selectedItem);
@@ -42,7 +48,7 @@ export function AccountMenu({ triggerClassName }: Props) {
 			):(
 				<>
 					<Button
-						// onClick={showAuthDialog} // TODO
+						onClick={handleAuthenticate}
 						className={clsx(triggerClassName)}
 						variant="ghost"
 					>

@@ -94,12 +94,11 @@ export function SignupForm({ onComplete }: Props) {
 				<Checkbox id="acceptedtos" checked={acceptedTos} onCheckedChange={checked => setAcceptedTos(checked as boolean)} required />
 				<Label htmlFor="acceptedtos" className="ml-2">
 					I accept the
-					<a href="/tos" target="_blank" className="ml-1">Terms of Service</a>
+					<a href="/terms" target="_blank" className="ml-1">Terms of Service</a>
 				</Label>
 			</div>
 
 			<div className="flex justify-end mt-4">
-				<Button onClick={onComplete} className="mr-2">Cancel</Button>
 				<Button type="submit" className="w-20">
 						{loading ? <Spinner /> : "Submit"}
 				</Button>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { SigninForm } from "@/components/dialogs/auth/SigninForm";
-import { SignupForm } from "@/components/dialogs/auth/SignupForm";
+import { SigninForm } from "@/components/views/authenticate/SigninForm";
+import { SignupForm } from "@/components/views/authenticate/SignupForm";
 import { Page } from "@/components/layout/Page";
 import { useLocation, useSearch } from "wouter";
 import { useAuth } from "@/components/AuthContext";

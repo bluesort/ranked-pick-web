@@ -9,36 +9,43 @@ import { useMemo } from "react";
 import { Authenticate } from "@/components/views/authenticate/Authenticate";
 import { Spinner } from "@/components/ui/Spinner";
 import { Page } from "@/components/layout/Page";
+import { authenticatePath } from "@/components/views/authenticate/utils";
+import { Terms } from "@/components/views/terms/Terms";
+import { NotFound } from "@/components/views/errors/NotFound";
 
 function Routes() {
   const {currentUser} = useAuth();
   const [location] = useLocation();
 
-  const authenticatedRoutes = useMemo(() => {
+  const surveyRoutes = useMemo(() => {
     if (currentUser === undefined) {
       // App is still initializing
       return <Page><Spinner /></Page>;
     } else if (currentUser === null) {
-      const redirectTo = location == '/authenticate' ? '/' : location;
-      const authUrl = '/authenticate?'+new URLSearchParams({return_to: redirectTo}).toString();
-      return <Redirect to={authUrl} replace />;
+      // User is signed out
+      return <Redirect to={'~'+authenticatePath(location)} replace />;
     }
     return (
-      <>
-        <Route path="/surveys/new" component={NewSurvey} />
-        <Route path="/surveys/:id" component={SurveyDetails} />
-        <Route path="/surveys/:id/respond" component={Respond} />
-        <Route path="/surveys/:id/thanks" component={ResponseThanks} />
-      </>
+      <Switch>
+        <Route path="/new" component={NewSurvey} />
+        <Route path="/:id" component={SurveyDetails} />
+        <Route path="/:id/respond" component={Respond} />
+        <Route path="/:id/thanks" component={ResponseThanks} />
+        <Route component={NotFound} />
+      </Switch>
     );
   }, [currentUser, location]);
 
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/terms" component={Terms} />
       <Route path="/authenticate" component={Authenticate} />
-      {authenticatedRoutes}
-      <Route>404 Placeholder</Route>
+      <Route path="/surveys" nest>
+        {surveyRoutes}
+      </Route>
+      <Route path="404" component={NotFound} />
+      <Route component={NotFound} />
     </Switch>
   );
 }

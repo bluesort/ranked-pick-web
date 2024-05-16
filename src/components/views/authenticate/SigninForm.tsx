@@ -56,7 +56,6 @@ export function SigninForm({ onComplete }: Props) {
 			/>
 
 			<div className="flex justify-end mt-4">
-				<Button onClick={onComplete} className="mr-2">Cancel</Button>
 				<Button type="submit" className="w-20">
 						{loading ? <Spinner /> : "Submit"}
 				</Button>

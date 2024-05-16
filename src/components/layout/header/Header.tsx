@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import logo from "@/assets/logo.svg";
-import { ActionMenu } from "@/components/layout/ActionMenu";
-import { AccountMenu } from "@/components/layout/AccountMenu";
+import { ActionMenu } from "@/components/layout/header/ActionMenu";
+import { AccountMenu } from "@/components/layout/header/AccountMenu";
 import { useAuth } from "@/components/AuthContext";
 
 function Header() {
