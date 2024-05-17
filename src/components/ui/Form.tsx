@@ -22,6 +22,7 @@ export function Form({ children, onSubmit, error, onCancel, className, submitLab
 		setApiError(null);
 	}, []);
 
+	// TODO: Catch auth error on failed refresh and redirect
 	const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setLoading(true);
@@ -54,8 +55,8 @@ export function Form({ children, onSubmit, error, onCancel, className, submitLab
 			<Separator />
 			<div className="flex justify-end items-center mt-4">
 				<Spinner visible={loading} className="mr-4" />
-				{onCancel && <Button onClick={onCancel}>Cancel</Button>}
-				<Button type="submit" className="w-20">
+				{onCancel && <Button onClick={onCancel} aria-label="cancel">Cancel</Button>}
+				<Button type="submit" className="w-20" aria-label="submit">
 					{submitLabel}
 				</Button>
 			</div>

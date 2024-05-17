@@ -34,7 +34,7 @@ class ApiClient {
 			return await this.refreshPromise;
 		} catch (err) {
 			this.accessToken = null;
-			return null;
+			throw 'Could not authenticate';
 		} finally {
 			this.refreshPromise = null;
 		}

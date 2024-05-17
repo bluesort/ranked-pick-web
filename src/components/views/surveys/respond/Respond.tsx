@@ -1,4 +1,4 @@
-import { Page } from "@/components/layout/Page";
+import { Page } from "@/components/Page";
 import { VoteForm } from "@/components/views/surveys/respond/VoteForm";
 import { getApiClient } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { useAuth } from "@/components/AuthContext";
-import { Form } from "@/components/ui/form/Form";
+import { Form } from "@/components/ui/Form";
 
 interface Props {
 	onComplete: () => void;

@@ -8,7 +8,7 @@ import { useAuth } from "@/components/AuthContext";
 import { useMemo } from "react";
 import { Authenticate } from "@/components/views/authenticate/Authenticate";
 import { Spinner } from "@/components/ui/Spinner";
-import { Page } from "@/components/layout/Page";
+import { Page } from "@/components/Page";
 import { authenticatePath } from "@/components/views/authenticate/utils";
 import { Terms } from "@/components/views/terms/Terms";
 import { NotFound } from "@/components/views/errors/NotFound";

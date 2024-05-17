@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { FiPlus, FiTrash2 } from "react-icons/fi";
 
 type ManageOptionsProps = {
   options: string[];
@@ -14,7 +15,8 @@ export function ManageOptions({ options, onUpdateOptions }: ManageOptionsProps) 
   };
 
   const onDeleteOption = (index: number) => {
-		const newOptions = [...options].splice(index, 1);
+		const newOptions = [...options];
+    newOptions.splice(index, 1);
 		onUpdateOptions(newOptions);
   };
 
@@ -25,20 +27,25 @@ export function ManageOptions({ options, onUpdateOptions }: ManageOptionsProps) 
   };
 
   return (
-    <div>
-      <div>
-        {options.map((option, index) => (
-          <div key={index} className="flex mb-1">
-            <Input
-              type="text"
-              value={option}
-              onChange={e => onOptionChange(index, e.target.value)}
-            />
-            <Button onClick={() => onDeleteOption(index)}>Delete</Button>
-          </div>
-        ))}
-      </div>
-			<Button onClick={onNewOption}>Add Option</Button>
+    <div id="options">
+      {options.map((option, index) => (
+        <div key={index} className="flex mb-2">
+          <Input
+            type="text"
+            value={option}
+            placeholder="Name the survey options"
+            onChange={e => onOptionChange(index, e.target.value)}
+            className="mr-1"
+          />
+          <Button onClick={() => onDeleteOption(index)} variant="outline" aria-label="delete option">
+            <FiTrash2 size="18" />
+          </Button>
+        </div>
+      ))}
+			<Button onClick={onNewOption} variant="secondary" className="flex items-center w-full" aria-label="add option">
+        <FiPlus size={18} className="mr-1 mt-0.5" />
+        Add option
+      </Button>
     </div>
   );
 }

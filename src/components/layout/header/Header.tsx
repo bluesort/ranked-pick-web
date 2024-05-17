@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/logo-color.svg";
 import { ActionMenu } from "@/components/layout/header/ActionMenu";
 import { AccountMenu } from "@/components/layout/header/AccountMenu";
 import { useAuth } from "@/components/AuthContext";

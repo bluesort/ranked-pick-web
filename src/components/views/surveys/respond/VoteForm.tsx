@@ -1,4 +1,4 @@
-import { Form } from "@/components/ui/form/Form";
+import { Form } from "@/components/ui/Form";
 import { useCallback, useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd';
 import { Button } from "@/components/ui/Button";
@@ -75,7 +75,7 @@ export function VoteForm({ survey }: Props) {
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="placeholder">
           {(provided) => (
-            <div ref={provided.innerRef} {...provided.droppableProps}>
+            <div ref={provided.innerRef} {...provided.droppableProps} className="transition-all">
               {surveyOptions?.map((option: any, index: number) => (
                 <VoteOption
                   key={option.id}
