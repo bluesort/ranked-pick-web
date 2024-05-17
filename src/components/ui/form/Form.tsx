@@ -2,17 +2,19 @@ import { Button } from "@/components/ui/Button";
 import { Separator } from "@/components/ui/Separator";
 import { Spinner } from "@/components/ui/Spinner";
 import { capitalize } from "@/lib/utils";
+import clsx from "clsx";
 import { useCallback, useState } from "react";
 
 interface Props {
 	children: React.ReactNode;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-	error?: string;
+	error?: string | null;
 	onCancel?: () => void;
+	className?: string;
 	submitLabel?: string;
 }
 
-export function Form({ children, onSubmit, error, onCancel, submitLabel = 'Submit' }: Props) {
+export function Form({ children, onSubmit, error, onCancel, className, submitLabel = 'Submit' }: Props) {
 	const [loading, setLoading] = useState(false);
 	const [apiError, setApiError] = useState<string | null>(null);
 
@@ -40,7 +42,7 @@ export function Form({ children, onSubmit, error, onCancel, submitLabel = 'Submi
 
 	const errorString = error ? capitalize(error) : apiError ? capitalize(apiError) : null;
 	return (
-		<form onSubmit={handleSubmit} onKeyDown={handleClearError}>
+		<form onSubmit={handleSubmit} onKeyDown={handleClearError} className={clsx('[&>*]:mb-4', className)}>
 			{children}
 			{errorString ? (
 				<div className="flex justify-center items-center bg-error text-error-foreground font-bold p-2 h-10 rounded-md my-4 first-letter:uppercase">

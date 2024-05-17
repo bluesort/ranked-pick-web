@@ -2,7 +2,7 @@ import { Routes } from "@/components/Routes";
 
 function Body() {
   return (
-    <div className="flex justify-center flex-grow p-8 mt-12">
+    <div className="flex justify-center flex-grow px-4 py-8 mt-12">
       <Routes />
     </div>
   );

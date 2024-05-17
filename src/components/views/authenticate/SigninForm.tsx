@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import { Button } from "@/components/ui/Button";
-import { Spinner } from "@/components/ui/Spinner";
 import { useAuth } from "@/components/AuthContext";
+import { Form } from "@/components/ui/form/Form";
 
 interface Props {
 	onComplete: () => void;
@@ -11,33 +10,17 @@ interface Props {
 
 export function SigninForm({ onComplete }: Props) {
 	const { signin } = useAuth();
-	const [error, setError] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [loading, setLoading] = useState(false);
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setLoading(true);
-		try {
-			await signin({email, password});
-			onComplete();
-		} catch (err) {
-			if (typeof(err) === 'string') {
-				setError(err);
-			} else {
-				console.error(err);
-				setError('Something went wrong');
-			}
-		} finally {
-			setLoading(false);
-		}
+		await signin({email, password});
+		onComplete();
 	};
 
 	return (
-		<form onSubmit={onSubmit}>
-			{error && <p className="text-red-800 mb-4 first-letter:uppercase">{error}</p>}
-
+		<Form onSubmit={onSubmit} submitLabel="Sign In">
 			<Label htmlFor="email">Email</Label>
 			<Input
 				id="email"
@@ -45,6 +28,7 @@ export function SigninForm({ onComplete }: Props) {
 				alt="email"
 				value={email}
 				onChange={e => setEmail(e.target.value)}
+				required
 			/>
 
 			<Label htmlFor="password">Password</Label>
@@ -53,13 +37,8 @@ export function SigninForm({ onComplete }: Props) {
 				type="password"
 				value={password}
 				onChange={e => setPassword(e.target.value)}
+				required
 			/>
-
-			<div className="flex justify-end mt-4">
-				<Button type="submit" className="w-20">
-						{loading ? <Spinner /> : "Submit"}
-				</Button>
-			</div>
-		</form>
+		</Form>
 	);
 }

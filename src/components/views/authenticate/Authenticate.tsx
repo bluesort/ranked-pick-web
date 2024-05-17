@@ -27,14 +27,14 @@ export function Authenticate() {
       {isSigningUp ? (
         <>
           <SignupForm onComplete={handleComplete} />
-          <p className="text-center">
+          <p className="text-center mt-6">
             Already have an account? <button onClick={() => setIsSigningUp(false)} className="underline">Sign in</button>
           </p>
         </>
       ):(
         <>
           <SigninForm onComplete={handleComplete} />
-          <p className="text-center">
+          <p className="text-center mt-6">
             Don't have an account? <button onClick={() => setIsSigningUp(true)} className="underline">Sign up</button>
           </p>
         </>

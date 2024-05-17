@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import { Button } from "@/components/ui/Button";
-import { Spinner } from "@/components/ui/Spinner";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { useAuth } from "@/components/AuthContext";
+import { Form } from "@/components/ui/form/Form";
 
 interface Props {
 	onComplete: () => void;
@@ -13,12 +12,21 @@ interface Props {
 export function SignupForm({ onComplete }: Props) {
 	const { signup } = useAuth();
 	const [error, setError] = useState<string | null>(null);
-	const [loading, setLoading] = useState(false);
 	const [displayName, setDisplayName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [passwordConfirmation, setPasswordConfirmation] = useState("");
 	const [acceptedTos, setAcceptedTos] = useState(false);
+
+	const handlePasswordConfirmationUpdate = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = e.target;
+		setPasswordConfirmation(value);
+		if (password && value && value != password) {
+			setError("Password confirmation does not match");
+		} else {
+			setError(null);
+		}
+	}, [password]);
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -28,32 +36,18 @@ export function SignupForm({ onComplete }: Props) {
 			return;
 		}
 
-		setLoading(true);
-		try {
-			await signup({
-				email: email,
-				password: password,
-				display_name: displayName,
-				password_confirmation: passwordConfirmation,
-				accepted_tos: acceptedTos,
-			});
-			onComplete();
-		} catch (err) {
-			if (typeof(err) === 'string') {
-				setError(err);
-			} else {
-				setError('Something went wrong');
-			}
-		} finally {
-			setLoading(false);
-		}
+		await signup({
+			email: email,
+			password: password,
+			display_name: displayName,
+			password_confirmation: passwordConfirmation,
+			accepted_tos: acceptedTos,
+		});
+		onComplete();
 	};
 
-	// TODO: Form component w/ footer
 	return (
-		<form onSubmit={onSubmit} className="[&>*]:mb-4">
-			{error && <p className="text-red-800 mb-4 first-letter:uppercase">{error}</p>}
-
+		<Form onSubmit={onSubmit} error={error} submitLabel="Sign Up">
 			<Label htmlFor="displayname">Display Name (optional)</Label>
 			<Input
 				id="displayname"
@@ -86,23 +80,17 @@ export function SignupForm({ onComplete }: Props) {
 				id="passwordconfirm"
 				type="password"
 				value={passwordConfirmation}
-				onChange={e => setPasswordConfirmation(e.target.value)}
+				onChange={handlePasswordConfirmationUpdate}
 				required
 			/>
 
-			<div className="flex">
+			<div className="flex mt-6">
 				<Checkbox id="acceptedtos" checked={acceptedTos} onCheckedChange={checked => setAcceptedTos(checked as boolean)} required />
 				<Label htmlFor="acceptedtos" className="ml-2">
 					I accept the
 					<a href="/terms" target="_blank" className="ml-1">Terms of Service</a>
 				</Label>
 			</div>
-
-			<div className="flex justify-end mt-4">
-				<Button type="submit" className="w-20">
-						{loading ? <Spinner /> : "Submit"}
-				</Button>
-			</div>
-		</form>
+		</Form>
 	);
 }
