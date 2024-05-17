@@ -24,6 +24,9 @@ export function Respond({id}: Props) {
   // TODO: Check survey state for response
   return (
     <Page title={survey?.title}>
+			{survey?.description && (
+        <p className="my-6">{survey.description}</p>
+      )}
       <VoteForm survey={survey} />
 		</Page>
   );

@@ -67,12 +67,11 @@ export function VoteForm({ survey }: Props) {
 
 	return (
 		<Form onSubmit={handleSubmit} submitLabel="Vote" footerSeparator={false}>
-      {survey?.description && (
-        <p className="my-6">{survey.description}</p>
-      )}
-      <p className="mb-4 text-sm text-muted-foreground">
-        Rank the following items in order of preference by dragging or using the buttons.
-      </p>
+      <div className="flex justify-center">
+        <p className="mb-4 text-sm text-muted-foreground">
+          Rank the following by dragging or using the buttons
+        </p>
+      </div>
       <div className="flex w-full items-center">
         <Separator className="shrink" decorative />
         <div className="mx-4">Best</div>

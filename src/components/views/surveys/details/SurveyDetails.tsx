@@ -23,13 +23,15 @@ export function SurveyDetails({ id }: Props) {
 		}
 	}, [survey, fetchSurvey, id]);
 
-	console.log(currentUser?.id, survey?.user_id);
+	// TODO: Edit survey
 	return (
 		<Page title={survey?.title}>
+			{survey?.description && (
+        <p className="my-6">{survey.description}</p>
+      )}
 			{currentUser?.id == survey?.user_id && (
 				<Results survey={survey} />
 			)}
-
 		</Page>
 	);
 }
