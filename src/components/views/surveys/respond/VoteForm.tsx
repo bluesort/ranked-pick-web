@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useLocation } from "wouter";
 import { getApiClient } from "@/lib/api-client";
+import { Separator } from "@/components/ui/Separator";
 
 interface Props {
 	survey: any;
@@ -65,13 +66,18 @@ export function VoteForm({ survey }: Props) {
   };
 
 	return (
-		<Form onSubmit={handleSubmit}>
-      <p className="mb-4">
-        Rank the following items by dragging and dropping or using the buttons.
+		<Form onSubmit={handleSubmit} submitLabel="Vote" footerSeparator={false}>
+      {survey?.description && (
+        <p className="my-6">{survey.description}</p>
+      )}
+      <p className="mb-4 text-sm text-muted-foreground">
+        Rank the following items in order of preference by dragging or using the buttons.
       </p>
-      <p className="mb-4">
-        The first item is your most preferred and the last is your least.
-      </p>
+      <div className="flex w-full items-center">
+        <Separator className="shrink" decorative />
+        <div className="mx-4">Best</div>
+        <Separator className="shrink" decorative />
+      </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="placeholder">
           {(provided) => (
@@ -90,6 +96,11 @@ export function VoteForm({ survey }: Props) {
           )}
         </Droppable>
       </DragDropContext>
+      <div className="flex w-full items-center">
+        <Separator className="shrink" decorative />
+        <div className="mx-4">Worst</div>
+        <Separator className="shrink" decorative />
+      </div>
 		</Form>
 	);
 }
@@ -109,15 +120,15 @@ function VoteOption({ option, index, onOptionUp, onOptionDown }: VoteOptionProps
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="bg-gray-100 my-1 flex items-center h-10 pl-2 border-gray-200 border-2 drop-shadow-sm"
+          className="bg-gray-100 my-2 flex items-center h-10 pl-3 py-6 drop-shadow-sm"
         >
           <div className="flex-grow">
             {option?.title}
           </div>
-          <Button onClick={onOptionDown} variant="outline">
+          <Button onClick={onOptionDown} variant="outline" className="h-12">
             <FiChevronDown />
           </Button>
-          <Button onClick={onOptionUp} variant="outline">
+          <Button onClick={onOptionUp} variant="outline" className="h-12">
             <FiChevronUp />
           </Button>
         </div>

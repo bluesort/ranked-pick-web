@@ -12,9 +12,10 @@ interface Props {
 	onCancel?: () => void;
 	className?: string;
 	submitLabel?: string;
+	footerSeparator?: boolean;
 }
 
-export function Form({ children, onSubmit, error, onCancel, className, submitLabel = 'Submit' }: Props) {
+export function Form({ children, onSubmit, error, onCancel, className, submitLabel = 'Submit', footerSeparator = true }: Props) {
 	const [loading, setLoading] = useState(false);
 	const [apiError, setApiError] = useState<string | null>(null);
 
@@ -43,7 +44,7 @@ export function Form({ children, onSubmit, error, onCancel, className, submitLab
 
 	const errorString = error ? capitalize(error) : apiError ? capitalize(apiError) : null;
 	return (
-		<form onSubmit={handleSubmit} onKeyDown={handleClearError} className={clsx('[&>*]:mb-4', className)}>
+		<form onSubmit={handleSubmit} onKeyDown={handleClearError} className={className}>
 			{children}
 			{errorString ? (
 				<div className="flex justify-center items-center bg-error text-error-foreground font-bold p-2 h-10 rounded-md my-4 first-letter:uppercase">
@@ -52,7 +53,7 @@ export function Form({ children, onSubmit, error, onCancel, className, submitLab
 			) : (
 				<div className="h-10 my-4"></div>
 			)}
-			<Separator />
+			{footerSeparator && <Separator />}
 			<div className="flex justify-end items-center mt-4">
 				<Spinner visible={loading} className="mr-4" />
 				{onCancel && <Button onClick={onCancel} aria-label="cancel">Cancel</Button>}

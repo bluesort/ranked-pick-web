@@ -47,7 +47,7 @@ export function SignupForm({ onComplete }: Props) {
 	};
 
 	return (
-		<Form onSubmit={onSubmit} error={error} submitLabel="Sign Up">
+		<Form onSubmit={onSubmit} error={error} submitLabel="Sign Up" className="[&>*]:mb-4">
 			<Label htmlFor="displayname">Display Name (optional)</Label>
 			<Input
 				id="displayname"

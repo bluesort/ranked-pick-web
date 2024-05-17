@@ -20,7 +20,7 @@ export function SigninForm({ onComplete }: Props) {
 	};
 
 	return (
-		<Form onSubmit={onSubmit} submitLabel="Sign In">
+		<Form onSubmit={onSubmit} submitLabel="Sign In" className="[&>*]:mb-4">
 			<Label htmlFor="email">Email</Label>
 			<Input
 				id="email"

@@ -28,7 +28,7 @@ export function CreateSurvey() {
 
   return (
     <Page title="New Survey">
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className="[&>*]:mb-4">
         <Label htmlFor="title">Title</Label>
         <Input
           id="title"
@@ -36,6 +36,7 @@ export function CreateSurvey() {
           placeholder="Enter a title"
           value={title}
           onChange={e => setTitle(e.target.value)}
+          required
         />
 
         <Label htmlFor="description">Description (optional)</Label>

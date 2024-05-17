@@ -36,6 +36,7 @@ export function ManageOptions({ options, onUpdateOptions }: ManageOptionsProps) 
             placeholder="Name the survey options"
             onChange={e => onOptionChange(index, e.target.value)}
             className="mr-1"
+            required
           />
           <Button onClick={() => onDeleteOption(index)} variant="outline" aria-label="delete option">
             <FiTrash2 size="18" />
