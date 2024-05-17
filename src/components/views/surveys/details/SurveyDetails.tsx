@@ -1,6 +1,6 @@
 import { useAuth } from "@/components/AuthContext";
 import { Page } from "@/components/layout/Page";
-import { Results } from "@/components/views/surveys/Results";
+import { Results } from "@/components/views/surveys/details/Results";
 import { getApiClient } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
 

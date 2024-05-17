@@ -4,14 +4,14 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Spinner } from "@/components/ui/Spinner";
 import { Textarea } from "@/components/ui/TextArea";
-import { ManageOptions } from "@/components/views/surveys/ManageOptions";
+import { ManageOptions } from "@/components/views/surveys/create/ManageOptions";
 import { getApiClient } from "@/lib/api-client";
 import { useState } from "react";
 import { useLocation } from "wouter";
 
 const api = getApiClient();
 
-export function NewSurvey() {
+export function CreateSurvey() {
   const [, setLocation] = useLocation();
   const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);

@@ -1,6 +1,6 @@
 import { Home } from "@/components/views/home/Home";
-import { NewSurvey } from "@/components/views/surveys/NewSurvey";
-import { SurveyDetails } from "@/components/views/surveys/SurveyDetails";
+import { CreateSurvey } from "@/components/views/surveys/create/CreateSurvey";
+import { SurveyDetails } from "@/components/views/surveys/details/SurveyDetails";
 import { Respond } from "@/components/views/surveys/respond/Respond";
 import { ResponseThanks } from "@/components/views/surveys/ResponseThanks";
 import { Redirect, Route, Switch, useLocation } from "wouter";
@@ -25,7 +25,7 @@ export function Routes() {
     }
     return (
       <Switch>
-        <Route path="/new" component={NewSurvey} />
+        <Route path="/new" component={CreateSurvey} />
         <Route path="/:id" nest>
           {params => {
             const {id} = params;
