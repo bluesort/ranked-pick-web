@@ -1,7 +1,8 @@
-import { CurrentUser, BodyParams, ResponseObject, defaultHeaders, getApiClient } from "@/lib/api_client";
+import { CurrentUser, BodyParams, ResponseObject, defaultHeaders, getApiClient } from "@/lib/api-client";
 import { ReactNode, createContext, useCallback, useContext, useEffect, useState } from "react";
 
 interface Context {
+	signedIn: boolean | undefined;
 	currentUser: CurrentUser | null | undefined;
 	signin: (params: BodyParams) => Promise<Response>;
 	signup: (params: BodyParams) => Promise<Response>;
@@ -78,6 +79,7 @@ export function AuthProvider({children}: {children: ReactNode}) {
 
 	return (
 		<AuthContext.Provider value={{
+			signedIn: currentUser === undefined ? undefined : !!currentUser,
 			currentUser,
 			signin,
 			signup,

@@ -13,41 +13,51 @@ import { authenticatePath } from "@/components/views/authenticate/utils";
 import { Terms } from "@/components/views/terms/Terms";
 import { NotFound } from "@/components/views/errors/NotFound";
 
-function Routes() {
-  const {currentUser} = useAuth();
+export function Routes() {
+  const {signedIn} = useAuth();
   const [location] = useLocation();
 
   const surveyRoutes = useMemo(() => {
-    if (currentUser === undefined) {
-      // App is still initializing
+    if (signedIn === undefined) {
       return <Page><Spinner /></Page>;
-    } else if (currentUser === null) {
-      // User is signed out
+    } else if (!signedIn) {
       return <Redirect to={'~'+authenticatePath(location)} replace />;
     }
     return (
       <Switch>
         <Route path="/new" component={NewSurvey} />
-        <Route path="/:id" component={SurveyDetails} />
-        <Route path="/:id/respond" component={Respond} />
-        <Route path="/:id/thanks" component={ResponseThanks} />
-        <Route component={NotFound} />
+        <Route path="/:id" nest>
+          {params => {
+            const {id} = params;
+            const surveyId = Number(id);
+            if (isNaN(surveyId)) {
+              return <NotFound />;
+            }
+            return (
+              <Switch>
+                <Route path="/"><SurveyDetails id={surveyId}/></Route>
+                <Route path="/respond"><Respond id={surveyId}/></Route>
+                <Route path="/thanks"><ResponseThanks /></Route>
+                <Redirect to="/respond" />
+              </Switch>
+            );
+          }}
+        </Route>
+        <Redirect to="~/" />
       </Switch>
     );
-  }, [currentUser, location]);
+  }, [signedIn, location]);
 
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/terms" component={Terms} />
       <Route path="/authenticate" component={Authenticate} />
-      <Route path="/surveys" nest>
-        {surveyRoutes}
-      </Route>
+
+      <Route path="/surveys" nest>{surveyRoutes}</Route>
+
       <Route path="404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
 }
-
-export default Routes;

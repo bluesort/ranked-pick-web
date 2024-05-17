@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/Label";
 import { Spinner } from "@/components/ui/Spinner";
 import { Textarea } from "@/components/ui/TextArea";
 import { ManageOptions } from "@/components/views/surveys/ManageOptions";
-import { getApiClient } from "@/lib/api_client";
+import { getApiClient } from "@/lib/api-client";
 import { useState } from "react";
 import { useLocation } from "wouter";
 

@@ -4,7 +4,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea
 import { Button } from "@/components/ui/Button";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useLocation } from "wouter";
-import { getApiClient } from "@/lib/api_client";
+import { getApiClient } from "@/lib/api-client";
 
 interface Props {
 	survey: any;
@@ -61,7 +61,7 @@ export function VoteForm({ survey }: Props) {
     await api.post(`/surveys/${survey.id}/vote`, {
       options: surveyOptions?.map((o: any) => o.id),
     });
-    setLocation(`/surveys/${survey.id}/thanks`);
+    setLocation(`/thanks`);
   };
 
 	return (

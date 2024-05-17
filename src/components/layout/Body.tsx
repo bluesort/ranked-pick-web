@@ -1,4 +1,4 @@
-import Routes from "@/components/Routes";
+import { Routes } from "@/components/Routes";
 
 function Body() {
   return (

@@ -1,13 +1,13 @@
 import { Page } from "@/components/layout/Page";
 import { VoteForm } from "@/components/views/surveys/respond/VoteForm";
-import { getApiClient } from "@/lib/api_client";
+import { getApiClient } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "wouter";
 
-const api = getApiClient();
+interface Props {
+	id: number;
+}
 
-export function Respond() {
-	const routeParams = useParams();
+export function Respond({id}: Props) {
 	const [survey, setSurvey] = useState<any>(null);
 
 	const fetchSurvey = useCallback(async (id: number) => {
@@ -15,17 +15,11 @@ export function Respond() {
 		setSurvey(surveyResp);
 	}, []);
 
-	// TODO: Fix double fetch
 	useEffect(() => {
-		if (routeParams?.id && !survey) {
-			try {
-        const surveyId = Number(routeParams.id);
-				fetchSurvey(surveyId);
-			} catch (err) {
-				console.error(err);
-			}
+		if (!survey) {
+			fetchSurvey(id);
 		}
-	}, [fetchSurvey, survey, routeParams?.id]);
+	}, [survey, fetchSurvey, id]);
 
   // TODO: Check survey state for response
   return (
@@ -34,3 +28,5 @@ export function Respond() {
 		</Page>
   );
 }
+
+const api = getApiClient();
