@@ -41,7 +41,7 @@ export function AccountMenu({ triggerClassName }: Props) {
 						<FiUserCheck size="20" />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
-						<DropdownMenuItem onSelect={() => handleMenuSelect('profile')}>Profile</DropdownMenuItem>
+						<DropdownMenuItem onSelect={() => handleMenuSelect('profile')} role="link">Profile</DropdownMenuItem>
 						<DropdownMenuItem onSelect={() => handleMenuSelect('signout')}>Sign Out</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

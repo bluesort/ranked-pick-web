@@ -38,7 +38,7 @@ export function Routes() {
                 <Route path="/"><SurveyDetails id={surveyId}/></Route>
                 <Route path="/respond"><Respond id={surveyId}/></Route>
                 <Route path="/thanks"><ResponseThanks /></Route>
-                <Redirect to="/respond" />
+                <Redirect to="/" />
               </Switch>
             );
           }}

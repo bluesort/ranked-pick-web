@@ -6,6 +6,7 @@ import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { useLocation } from "wouter";
 import { getApiClient } from "@/lib/api-client";
 import { Separator } from "@/components/ui/Separator";
+import { Spinner } from "@/components/ui/Spinner";
 
 interface Props {
 	survey: any;
@@ -32,8 +33,6 @@ export function VoteForm({ survey }: Props) {
 		}
 	}, [survey, surveyOptions, fetchSurveyOptions]);
 
-	if (!survey) { return null; }
-
   const handleDragEnd = (result: DropResult) => {
     if (!surveyOptions || !result.destination) { return; }
     const newOptions = [...surveyOptions];
@@ -58,15 +57,26 @@ export function VoteForm({ survey }: Props) {
     setSurveyOptions(newOptions);
   };
 
-  const handleSubmit = async () => {
+  const handleCancel = useCallback(() => {
+    setLocation(`/`);
+  }, [setLocation]);
+
+  const handleSubmit = useCallback(async () => {
     await api.post(`/surveys/${survey.id}/vote`, {
       options: surveyOptions?.map((o: any) => o.id),
     });
     setLocation(`/thanks`);
-  };
+  }, [surveyOptions, setLocation, survey?.id]);
 
+  if (!surveyOptions) { return <Spinner />; }
 	return (
-		<Form onSubmit={handleSubmit} submitLabel="Vote" footerSeparator={false}>
+		<Form
+      onSubmit={handleSubmit}
+      onCancel={handleCancel}
+      submitLabel="Vote"
+      cancelLabel="Back to Survey"
+      footerSeparator={false}
+    >
       <div className="flex justify-center">
         <p className="mb-4 text-sm text-muted-foreground">
           Rank the following by dragging or using the buttons
@@ -124,11 +134,11 @@ function VoteOption({ option, index, onOptionUp, onOptionDown }: VoteOptionProps
           <div className="flex-grow">
             {option?.title}
           </div>
-          <Button onClick={onOptionDown} variant="outline" className="h-12">
-            <FiChevronDown />
+          <Button onClick={onOptionDown} variant="outline" className="h-12 py-0">
+            <FiChevronDown size="20" />
           </Button>
-          <Button onClick={onOptionUp} variant="outline" className="h-12">
-            <FiChevronUp />
+          <Button onClick={onOptionUp} variant="outline" className="h-12 py-0">
+            <FiChevronUp size="20" />
           </Button>
         </div>
       )}

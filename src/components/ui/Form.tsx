@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/Button";
 import { Separator } from "@/components/ui/Separator";
 import { Spinner } from "@/components/ui/Spinner";
 import { capitalize } from "@/lib/utils";
-import clsx from "clsx";
 import { useCallback, useState } from "react";
 
 interface Props {
@@ -12,10 +11,13 @@ interface Props {
 	onCancel?: () => void;
 	className?: string;
 	submitLabel?: string;
+	cancelLabel?: string;
 	footerSeparator?: boolean;
 }
 
-export function Form({ children, onSubmit, error, onCancel, className, submitLabel = 'Submit', footerSeparator = true }: Props) {
+export function Form({
+	children, onSubmit, error, onCancel, className, submitLabel = 'Submit', cancelLabel = 'Cancel', footerSeparator = true
+}: Props) {
 	const [loading, setLoading] = useState(false);
 	const [apiError, setApiError] = useState<string | null>(null);
 
@@ -56,7 +58,9 @@ export function Form({ children, onSubmit, error, onCancel, className, submitLab
 			{footerSeparator && <Separator />}
 			<div className="flex justify-end items-center mt-4">
 				<Spinner visible={loading} className="mr-4" />
-				{onCancel && <Button onClick={onCancel} aria-label="cancel">Cancel</Button>}
+				{onCancel && (
+					<Button onClick={onCancel} variant="secondary" aria-label="cancel" className="mr-4">{cancelLabel}</Button>
+				)}
 				<Button type="submit" className="w-20" aria-label="submit">
 					{submitLabel}
 				</Button>

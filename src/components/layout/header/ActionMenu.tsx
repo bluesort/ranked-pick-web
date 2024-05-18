@@ -27,7 +27,7 @@ export function ActionMenu({ triggerClassName }: Props) {
 				<FiMoreVertical size="20" />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
-				<DropdownMenuItem onSelect={() => handleMenuSelect('new_survey')}>New Survey</DropdownMenuItem>
+				<DropdownMenuItem onSelect={() => handleMenuSelect('new_survey')} role="link">New Survey</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

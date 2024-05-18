@@ -33,7 +33,7 @@ export function ManageOptions({ options, onUpdateOptions }: ManageOptionsProps) 
           <Input
             type="text"
             value={option}
-            placeholder="Name the survey options"
+            placeholder="List the survey options"
             onChange={e => onOptionChange(index, e.target.value)}
             className="mr-1"
             required

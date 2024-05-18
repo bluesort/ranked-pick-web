@@ -9,7 +9,6 @@ interface Props {
 	headerSize?: 1 | 2 | 3;
 }
 
-
 export function Page({ children, title, center, className, headerSize = 2 }: Props) {
 	const header = useMemo(() => {
 		if (!title) { return null; }
