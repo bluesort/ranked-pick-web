@@ -69,8 +69,12 @@ export function AuthProvider({children}: {children: ReactNode}) {
 	}, [request]);
 
 	const fetchCurrentUser = useCallback(async () => {
-		const resp = await api.refreshToken();
-		setCurrentUser(resp?.user || null);
+		try {
+			const resp = await api.refreshToken();
+			setCurrentUser(resp?.user || null);
+		} catch (err) {
+			setCurrentUser(null);
+		}
 	}, []);
 
 	useEffect(() => {
