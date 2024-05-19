@@ -88,7 +88,8 @@ export function SignupForm({ onComplete }: Props) {
 				<Checkbox id="acceptedtos" checked={acceptedTos} onCheckedChange={checked => setAcceptedTos(checked as boolean)} required />
 				<Label htmlFor="acceptedtos" className="ml-2">
 					I accept the
-					<a href="/terms" target="_blank" className="ml-1">Terms of Service</a>
+					<a href="/terms" target="_blank" className="ml-1">Terms of Service</a> and
+					<a href="/privacy" target="_blank" className="ml-1">Privacy Policy</a>
 				</Label>
 			</div>
 		</Form>

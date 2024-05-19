@@ -27,7 +27,7 @@ export function Page({ children, title, center, className, headerSize = 2 }: Pro
 	}, [title, headerSize]);
 
 	return (
-		<div className={clsx('min-w-80 w-full max-w-[30rem]', center && 'flex flex-col items-center', className)}>
+		<div className={clsx('min-w-80 w-full max-w-[50rem]', center && 'flex flex-col items-center', className)}>
 			{header}
 			{children}
 		</div>

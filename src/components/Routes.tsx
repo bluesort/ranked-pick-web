@@ -12,6 +12,7 @@ import { Page } from "@/components/Page";
 import { authenticatePath } from "@/components/views/authenticate/utils";
 import { Terms } from "@/components/views/terms/Terms";
 import { NotFound } from "@/components/views/errors/NotFound";
+import { Privacy } from "@/components/views/privacy/Privacy";
 
 export function Routes() {
   const {signedIn} = useAuth();
@@ -52,6 +53,7 @@ export function Routes() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/terms" component={Terms} />
+      <Route path="/privacy" component={Privacy} />
       <Route path="/authenticate" component={Authenticate} />
 
       <Route path="/surveys" nest>{surveyRoutes}</Route>
