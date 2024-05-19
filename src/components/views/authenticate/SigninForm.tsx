@@ -10,24 +10,23 @@ interface Props {
 
 export function SigninForm({ onComplete }: Props) {
 	const { signin } = useAuth();
-	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
 	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		await signin({email, password});
+		await signin({username, password});
 		onComplete();
 	};
 
 	return (
 		<Form onSubmit={onSubmit} submitLabel="Sign In" className="[&>*]:mb-4">
-			<Label htmlFor="email">Email</Label>
+			<Label htmlFor="username">Username</Label>
 			<Input
-				id="email"
-				type="email"
-				alt="email"
-				value={email}
-				onChange={e => setEmail(e.target.value)}
+				id="username"
+				alt="username"
+				value={username}
+				onChange={e => setUsername(e.target.value)}
 				required
 			/>
 

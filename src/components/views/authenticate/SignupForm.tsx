@@ -13,7 +13,7 @@ export function SignupForm({ onComplete }: Props) {
 	const { signup } = useAuth();
 	const [error, setError] = useState<string | null>(null);
 	const [displayName, setDisplayName] = useState("");
-	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [passwordConfirmation, setPasswordConfirmation] = useState("");
 	const [acceptedTos, setAcceptedTos] = useState(false);
@@ -37,7 +37,7 @@ export function SignupForm({ onComplete }: Props) {
 		}
 
 		await signup({
-			email: email,
+			username: username,
 			password: password,
 			display_name: displayName,
 			password_confirmation: passwordConfirmation,
@@ -56,13 +56,12 @@ export function SignupForm({ onComplete }: Props) {
 				onChange={e => setDisplayName(e.target.value)}
 			/>
 
-			<Label htmlFor="email">Email</Label>
+			<Label htmlFor="username">Username</Label>
 			<Input
-				id="email"
-				type="email"
-				alt="email"
-				value={email}
-				onChange={e => setEmail(e.target.value)}
+				id="username"
+				alt="username"
+				value={username}
+				onChange={e => setUsername(e.target.value)}
 				required
 			/>
 

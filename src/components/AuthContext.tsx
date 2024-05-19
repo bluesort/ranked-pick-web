@@ -40,34 +40,6 @@ export function AuthProvider({children}: {children: ReactNode}) {
 		}
 	}, []);
 
-	const signin = useCallback(async (params: BodyParams) => {
-		const resp = await request('/auth/signin', params);
-		api.refreshToken();
-		setCurrentUser({
-			id: resp.user.id as number,
-			email: resp.user.email as string,
-			displayName: resp.user.display_name as string | null,
-		});
-
-		return resp;
-	}, [request]);
-
-	const signup = useCallback(async (params: BodyParams) => {
-		const resp = await request('/auth/signup', params);
-		api.refreshToken();
-		setCurrentUser({
-			id: resp.user.id as number,
-			email: resp.user.email as string,
-			displayName: resp.user.display_name as string | null,
-		});
-		return resp;
-	}, [request]);
-
-	const signout = useCallback(async () => {
-		await request('/auth/signout', undefined);
-		setCurrentUser(null);
-	}, [request]);
-
 	const fetchCurrentUser = useCallback(async () => {
 		try {
 			const resp = await api.refreshToken();
@@ -76,6 +48,23 @@ export function AuthProvider({children}: {children: ReactNode}) {
 			setCurrentUser(null);
 		}
 	}, []);
+
+	const signin = useCallback(async (params: BodyParams) => {
+		const resp = await request('/auth/signin', params);
+		fetchCurrentUser();
+		return resp;
+	}, [request, fetchCurrentUser]);
+
+	const signup = useCallback(async (params: BodyParams) => {
+		const resp = await request('/auth/signup', params);
+		fetchCurrentUser();
+		return resp;
+	}, [request, fetchCurrentUser]);
+
+	const signout = useCallback(async () => {
+		await request('/auth/signout', undefined);
+		setCurrentUser(null);
+	}, [request]);
 
 	useEffect(() => {
 		fetchCurrentUser();
