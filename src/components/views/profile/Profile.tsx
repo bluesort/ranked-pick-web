@@ -5,7 +5,8 @@ import { Form } from "@/components/ui/Form";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { getApiClient } from "@/lib/api-client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FiEdit3, FiX } from "react-icons/fi";
 
 export function Profile() {
 	const { currentUser, setCurrentUser } = useAuth();
@@ -23,13 +24,28 @@ export function Profile() {
 		setCurrentUser(user);
 	};
 
+	useEffect(() => {
+		if (!isEditing) {
+			setUsername(currentUser?.username);
+			setDisplayName(currentUser?.display_name);
+		}
+	}, [isEditing, currentUser?.display_name, currentUser?.username]);
+
 	if (!currentUser) { return; }
 	return (
-		<Page title={(
+		<Page size="sm" title={(
 			<div className="flex justify-between items-center mb-4">
 				<h2>Profile</h2>
-				<Button variant="outline" onClick={() => setIsEditing(!isEditing)}>
-					{isEditing ? 'Cancel' : 'Edit'}
+				<Button
+					variant="outline"
+					onClick={() => setIsEditing(!isEditing)}
+					className="h-10 w-10 p-0"
+					aria-label={isEditing ? "Cancel editing" : "Edit profile"}
+				>
+					{isEditing ?
+						<FiX size="20" /> :
+						<FiEdit3 size="20" />
+					}
 				</Button>
 			</div>
 		)}>
