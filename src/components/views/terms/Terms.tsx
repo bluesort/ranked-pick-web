@@ -2,7 +2,7 @@ import { Page } from "@/components/Page";
 
 export function Terms() {
 	return (
-		<Page title="Terms of Service" className="[&>p]:mb-4 [&>h3]:my-5 text-justify">
+		<Page title="Terms of Service" size="lg" className="[&>p]:mb-4 [&>h3]:my-5 text-justify">
 			<p>Welcome to Ranked Pick!</p>
 
 			<p>
@@ -38,10 +38,11 @@ export function Terms() {
 			<h3>Privacy</h3>
 
 			<p>
-				Your privacy is important to us. Our Privacy Policy explains how we collect, use,
-				and disclose information about you when you access or use the Service. By using the
-				Service, you consent to the collection and use of your information as described in
-				our Privacy Policy.
+				Your privacy is important to us. Our
+				<a href="/privacy" target="_blank" className="mx-1">Privacy Policy</a>
+				explains how we collect, use, and disclose information about you when you access or
+				use the Service. By using the Service, you consent to the collection and use of your
+				information as described in our Privacy Policy.
 			</p>
 
 			<h3>Account Security</h3>

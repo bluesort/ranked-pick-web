@@ -2,7 +2,7 @@ import { Page } from "@/components/Page";
 
 export function Privacy() {
 	return (
-		<Page title="Privacy Policy" className="[&>*]:mb-4 [&>h4]:italic text-justify">
+		<Page title="Privacy Policy" size="lg" className="[&>*]:mb-4 [&>h4]:italic text-justify">
 			<p>Effective date: May 15th, 2024</p>
 
 			<p>
