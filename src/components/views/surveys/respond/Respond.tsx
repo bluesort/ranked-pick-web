@@ -1,25 +1,16 @@
 import { Page } from "@/components/Page";
+import { Spinner } from "@/components/ui/Spinner";
 import { VoteForm } from "@/components/views/surveys/respond/VoteForm";
-import { getApiClient } from "@/lib/api-client";
-import { useState, useEffect, useCallback } from "react";
+import { useSurveyRoute } from "@/components/views/surveys/use-survey-route";
 
 interface Props {
 	id: number;
 }
 
 export function Respond({id}: Props) {
-	const [survey, setSurvey] = useState<any>(null);
+	const survey = useSurveyRoute(id);
 
-	const fetchSurvey = useCallback(async (id: number) => {
-		const surveyResp = await api.get(`/surveys/${id}`);
-		setSurvey(surveyResp);
-	}, []);
-
-	useEffect(() => {
-		if (!survey) {
-			fetchSurvey(id);
-		}
-	}, [survey, fetchSurvey, id]);
+	if (!survey) { return <Page><Spinner /></Page>; }
 
   // TODO: Check survey state for response
   return (
@@ -31,5 +22,3 @@ export function Respond({id}: Props) {
 		</Page>
   );
 }
-
-const api = getApiClient();

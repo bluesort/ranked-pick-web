@@ -1,12 +1,13 @@
 import { useAuth } from "@/components/AuthContext";
 import { Page } from "@/components/Page";
 import { Results } from "@/components/views/surveys/details/Results";
-import { getApiClient } from "@/lib/api-client";
 import { pluralize } from "@/lib/utils";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { LiaVoteYeaSolid } from "react-icons/lia";
 import { Button } from "@/components/ui/Button";
 import { useLocation } from "wouter";
+import { useSurveyRoute } from "@/components/views/surveys/use-survey-route";
+import { Spinner } from "@/components/ui/Spinner";
 
 interface Props {
 	id: number;
@@ -14,30 +15,21 @@ interface Props {
 
 export function SurveyDetails({ id }: Props) {
 	const {currentUser} = useAuth();
-	const [survey, setSurvey] = useState<any | null>(null);
 	const[,setLocation] = useLocation();
-
-	const fetchSurvey = useCallback(async (id: number) => {
-		const resp = await api.get(`/surveys/${id}`);
-		setSurvey(resp);
-	}, []);
+	const survey = useSurveyRoute(id);
 
 	const handleVote = useCallback(() => {
 		setLocation('/respond');
 	}, [setLocation]);
 
-	useEffect(() => {
-		if (!survey) {
-			fetchSurvey(id);
-		}
-	}, [survey, fetchSurvey, id]);
+	if (!survey) { return <Page><Spinner /></Page>; }
 
 	// TODO: Edit survey
 	return (
 		<Page title={survey?.title}>
 			<p className="mb-6"></p>
 			{survey?.description && (
-        <p className="mb-6">{survey.description}</p>
+        <p className="mb-6">{survey?.description}</p>
       )}
 			<div className="mb-4 w-full flex justify-between items-center">
 				<Button onClick={handleVote} className="text-lg" role="link">
@@ -56,5 +48,3 @@ export function SurveyDetails({ id }: Props) {
 		</Page>
 	);
 }
-
-const api = getApiClient();

@@ -1,5 +1,3 @@
-
-
 export type BodyParams = { [key: string]: any };
 export type ResponseObject = { [key: string]: any };
 
@@ -21,6 +19,15 @@ export const defaultHeaders: { [key: string]: string } = {
 	"Accept":"application/json",
 	"Content-Type":"application/json",
 };
+
+export class ApiError {
+	error: string;
+	status: number;
+	constructor(error: string, status: number) {
+		this.error = error;
+		this.status = status;
+	}
+}
 
 class ApiClient {
 	private accessToken: string | null = null;
@@ -101,7 +108,7 @@ class ApiClient {
 				// TODO: handle non-json responses
 			}
 			if (!resp.ok) {
-				throw(body?.error || 'Unknown error');
+				throw new ApiError(body?.error || 'Unknown error', resp.status);
 			}
 			return body;
 		} catch (err) {
