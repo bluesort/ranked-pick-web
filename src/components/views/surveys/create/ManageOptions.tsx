@@ -33,7 +33,7 @@ export function ManageOptions({ options, onUpdateOptions }: ManageOptionsProps) 
           <Input
             type="text"
             value={option}
-            placeholder="List the survey options"
+            placeholder="List the voting options"
             onChange={e => onOptionChange(index, e.target.value)}
             className="mr-1"
             required

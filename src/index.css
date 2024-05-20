@@ -27,6 +27,12 @@ ul {
   list-style-position: inside;
 }
 
+dt {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

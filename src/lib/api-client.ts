@@ -6,7 +6,7 @@ export type ResponseObject = { [key: string]: any };
 export interface CurrentUser {
 	id: number;
 	username: string;
-	displayName: string | null;
+	display_name: string | null;
 }
 interface TokenResponse {
 	token: string;

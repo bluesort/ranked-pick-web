@@ -48,14 +48,6 @@ export function SignupForm({ onComplete }: Props) {
 
 	return (
 		<Form onSubmit={onSubmit} error={error} submitLabel="Sign Up" className="[&>*]:mb-4">
-			<Label htmlFor="displayname">Display Name (optional)</Label>
-			<Input
-				id="displayname"
-				alt="display name"
-				value={displayName}
-				onChange={e => setDisplayName(e.target.value)}
-			/>
-
 			<Label htmlFor="username">Username</Label>
 			<Input
 				id="username"
@@ -63,6 +55,14 @@ export function SignupForm({ onComplete }: Props) {
 				value={username}
 				onChange={e => setUsername(e.target.value)}
 				required
+			/>
+
+			<Label htmlFor="displayname">Display Name (optional)</Label>
+			<Input
+				id="displayname"
+				alt="display name"
+				value={displayName}
+				onChange={e => setDisplayName(e.target.value)}
 			/>
 
 			<Label htmlFor="password">Password</Label>

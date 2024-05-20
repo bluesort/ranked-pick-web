@@ -13,41 +13,36 @@ import { authenticatePath } from "@/components/views/authenticate/utils";
 import { Terms } from "@/components/views/terms/Terms";
 import { NotFound } from "@/components/views/errors/NotFound";
 import { Privacy } from "@/components/views/privacy/Privacy";
+import { Profile } from "@/components/views/profile/Profile";
 
 export function Routes() {
   const {signedIn} = useAuth();
   const [location] = useLocation();
 
-  const surveyRoutes = useMemo(() => {
-    if (signedIn === undefined) {
-      return <Page><Spinner /></Page>;
-    } else if (!signedIn) {
-      return <Redirect to={'~'+authenticatePath(location)} replace />;
-    }
-    return (
-      <Switch>
-        <Route path="/new" component={CreateSurvey} />
-        <Route path="/:id" nest>
-          {params => {
-            const {id} = params;
-            const surveyId = Number(id);
-            if (isNaN(surveyId)) {
-              return <NotFound />;
-            }
-            return (
-              <Switch>
-                <Route path="/"><SurveyDetails id={surveyId}/></Route>
-                <Route path="/respond"><Respond id={surveyId}/></Route>
-                <Route path="/thanks"><ResponseThanks /></Route>
-                <Redirect to="/" />
-              </Switch>
-            );
-          }}
-        </Route>
-        <Redirect to="~/" />
-      </Switch>
-    );
-  }, [signedIn, location]);
+  const surveyRoutes = useAuthenticatedRoutes(signedIn, location, (
+    <Switch>
+      <Route path="/new" component={CreateSurvey} />
+      <Route path="/:id" nest>
+        {params => {
+          const {id} = params;
+          const surveyId = Number(id);
+          if (isNaN(surveyId)) {
+            return <NotFound />;
+          }
+          return (
+            <Switch>
+              <Route path="/"><SurveyDetails id={surveyId}/></Route>
+              <Route path="/respond"><Respond id={surveyId}/></Route>
+              <Route path="/thanks"><ResponseThanks /></Route>
+              <Redirect to="/" />
+            </Switch>
+          );
+        }}
+      </Route>
+      <Redirect to="~/" />
+    </Switch>
+  ));
+  const profileRoute = useAuthenticatedRoutes(signedIn, location, <Profile />);
 
   return (
     <Switch>
@@ -57,9 +52,21 @@ export function Routes() {
       <Route path="/authenticate" component={Authenticate} />
 
       <Route path="/surveys" nest>{surveyRoutes}</Route>
+      <Route path="/profile">{profileRoute}</Route>
 
       <Route path="404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
+}
+
+function useAuthenticatedRoutes(signedIn: boolean | undefined, location: string, routes: JSX.Element) {
+  return useMemo(() => {
+    if (signedIn === undefined) {
+      return <Page><Spinner /></Page>;
+    } else if (!signedIn) {
+      return <Redirect to={'~'+authenticatePath(location)} replace />;
+    }
+    return routes;
+  }, [location, signedIn, routes]);
 }

@@ -4,6 +4,7 @@ import { ReactNode, createContext, useCallback, useContext, useEffect, useState 
 interface Context {
 	signedIn: boolean | undefined;
 	currentUser: CurrentUser | null | undefined;
+	setCurrentUser: (currentUser: CurrentUser | null) => void;
 	signin: (params: BodyParams) => Promise<Response>;
 	signup: (params: BodyParams) => Promise<Response>;
 	signout: () => Promise<void>;
@@ -49,6 +50,13 @@ export function AuthProvider({children}: {children: ReactNode}) {
 		}
 	}, []);
 
+	const handleSetCurrentUser = useCallback((user: CurrentUser | null) => {
+		if (JSON.stringify(currentUser) === JSON.stringify(user)) {
+			return;
+		}
+		setCurrentUser(user);
+	}, [currentUser]);
+
 	const signin = useCallback(async (params: BodyParams) => {
 		const resp = await request('/auth/signin', params);
 		fetchCurrentUser();
@@ -74,6 +82,7 @@ export function AuthProvider({children}: {children: ReactNode}) {
 		<AuthContext.Provider value={{
 			signedIn: currentUser === undefined ? undefined : !!currentUser,
 			currentUser,
+			setCurrentUser: handleSetCurrentUser,
 			signin,
 			signup,
 			signout,
