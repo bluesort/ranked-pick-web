@@ -27,7 +27,7 @@ export function CreateSurvey() {
   };
 
   return (
-    <Page title="New Survey">
+    <Page title="Create Survey">
       <Form onSubmit={handleSubmit} className="[&>*]:mb-4">
         <Label htmlFor="title">Title</Label>
         <Input
