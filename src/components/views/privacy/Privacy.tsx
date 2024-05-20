@@ -42,10 +42,10 @@ export function Privacy() {
 				This information is collected solely for the purpose of providing the Service.
 			</p>
 
-			<h4>Content Data</h4>
+			<h4>User Content</h4>
 
 			<p>
-				Our Service allows users to provide and store content, including but not
+				Our Service allows users to provide and store content, which may include but is not
 				limited to text, images, and other media.
 			</p>
 
