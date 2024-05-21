@@ -33,10 +33,9 @@ export function Privacy() {
 			</p>
 
 			<ul>
-				<li>Name</li>
+				<li>Name (if provided voluntarily)</li>
 				<li>Email address (if provided voluntarily)</li>
 				<li>IP Address</li>
-				<li>Any other information voluntarily provided by the user</li>
 			</ul>
 
 			<p>
