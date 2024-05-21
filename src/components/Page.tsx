@@ -26,7 +26,7 @@ export function Page({ children, title, center, className, size = 'md' }: Props)
 		if (typeof(title) != 'string') {
 			return title;
 		}
-		return <h2 className="mb-6 tracking-wide">{title}</h2>;
+		return <div className="w-full flex justify-center"><h2 className="mb-6 tracking-wide">{title}</h2></div>;
 	}, [title]);
 
 	return (

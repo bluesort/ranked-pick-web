@@ -14,7 +14,10 @@ export function ActionMenu({ triggerClassName }: Props) {
 	const handleMenuSelect = useCallback(async (selectedItem: string) => {
 		switch (selectedItem) {
 			case 'new_survey':
-				setLocation('/surveys/new');
+				setLocation('~/surveys/create');
+				break;
+			case 'view_surveys':
+				setLocation('~/surveys');
 				break;
 			default:
 				console.error('Unknown auth menu item selected: ', selectedItem);
@@ -28,6 +31,7 @@ export function ActionMenu({ triggerClassName }: Props) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<DropdownMenuItem onSelect={() => handleMenuSelect('new_survey')} role="link">New Survey</DropdownMenuItem>
+				<DropdownMenuItem onSelect={() => handleMenuSelect('view_surveys')} role="link">View Surveys</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

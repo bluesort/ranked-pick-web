@@ -7,10 +7,10 @@ interface Props {
 	id: number;
 }
 
-export function Respond({id}: Props) {
+export function SurveyRespond({id}: Props) {
 	const survey = useSurveyRoute(id);
 
-	if (!survey) { return <Page><Spinner /></Page>; }
+	if (!survey) { return <Page center><Spinner /></Page>; }
 
   // TODO: Check survey state for response
   return (

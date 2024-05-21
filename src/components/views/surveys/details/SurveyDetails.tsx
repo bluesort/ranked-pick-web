@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { useLocation } from "wouter";
 import { useSurveyRoute } from "@/components/views/surveys/use-survey-route";
 import { Spinner } from "@/components/ui/Spinner";
+import { ResponseCount } from "@/components/views/surveys/ResponseCount";
 
 interface Props {
 	id: number;
@@ -37,10 +38,7 @@ export function SurveyDetails({ id }: Props) {
 					Vote
 				</Button>
 				<div className="mt-2">You have not voted</div>
-				<div className="flex">
-					<div className="font-bold mr-1 text-2xl">{survey?.response_count || 0}</div>
-					<div className="mt-2">{pluralize(survey?.response_count, 'response', 'responses')}</div>
-				</div>
+				<ResponseCount responseCount={survey?.response_count} />
 			</div>
 			{currentUser?.id == survey?.user_id && (
 				<Results survey={survey} />

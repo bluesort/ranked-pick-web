@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/Button";
 import { Separator } from "@/components/ui/Separator";
 import { Spinner } from "@/components/ui/Spinner";
 import { capitalize } from "@/lib/utils";
+import clsx from "clsx";
 import { useCallback, useState } from "react";
 
 interface Props {
@@ -46,7 +47,7 @@ export function Form({
 
 	const errorString = error ? capitalize(error) : apiError ? capitalize(apiError) : null;
 	return (
-		<form onSubmit={handleSubmit} onKeyDown={handleClearError} className={className}>
+		<form onSubmit={handleSubmit} onKeyDown={handleClearError} className={clsx('w-full', className)}>
 			{children}
 			{errorString ? (
 				<div className="flex justify-center items-center bg-error text-error-foreground font-bold p-2 h-10 rounded-md my-4 first-letter:uppercase">

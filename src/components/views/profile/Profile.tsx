@@ -93,7 +93,7 @@ export function Profile() {
 						open={confirmingDelete}
 						setOpen={setConfirmingDelete}
 						onConfirm={handleDelete}
-						header="Delete account"
+						title="Delete account"
 						description="This action cannot be undone. Your account will be permanently deleted and your survey responses anonymized."
 						confirmLabel="Delete my account"
 						destructiveConfirm

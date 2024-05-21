@@ -6,7 +6,7 @@ interface Props {
 	setOpen: (open: boolean) => void;
 	onConfirm: () => void;
 	destructiveConfirm?: boolean;
-	header?: string;
+	title?: string;
 	description?: string;
 	confirmLabel?: string
 }
@@ -16,7 +16,7 @@ export function ConfirmationDialog({
 	setOpen,
 	onConfirm,
 	destructiveConfirm,
-	header = "Are you sure?",
+	title = "Are you sure?",
 	description = "This action cannot be undone.",
 	confirmLabel = "Confirm"
 }: Props) {
@@ -24,7 +24,7 @@ export function ConfirmationDialog({
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent>
 				<DialogHeader>
-					{header}
+					{title}
 				</DialogHeader>
 				<DialogDescription>
 					{description}
