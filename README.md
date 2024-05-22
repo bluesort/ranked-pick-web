@@ -8,15 +8,15 @@ API source can be found [here](https://github.com/carterjackson/ranked-pick-api)
 
 ## Development
 
-### Docker
-
-The service is run locally through [Docker](https://www.docker.com/) with [Docker Compose](https://docs.docker.com/compose/).
+The service is run locally with [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/).
 
 The `--service-ports` flag is required to open ports on the host.
 
 ```bash
 docker compose run --service-ports rp-web
 ```
+
+Navigate to http://localhost:8000 to view the now running client.
 
 ## Testing
 
