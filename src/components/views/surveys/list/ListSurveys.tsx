@@ -26,7 +26,7 @@ export function ListSurveys() {
 		<Page title="Surveys">
 			{!createdSurveys?.length && !respondedSurveys?.length && (
 				<div className="flex justify-center text-muted-foreground">
-					You have not created or responded to any surveys
+					You have not created or responded to any surveys.
 				</div>
 			)}
 			{!!createdSurveys?.length && (

@@ -24,10 +24,11 @@ export class ApiError {
 	}
 }
 
+// TODO: Use API host env var
 // Vite dev server doesn't support proxying on subdomain, so use subpath instead
 const apiHost = import.meta.env.PROD ?
 	`${window.location.protocol}//api.${window.location.hostname}` :
-	`${window.location.protocol}//${window.location.host}/api`;
+	`${window.location.protocol}//${window.location.host}/dev_api`;
 
 export const defaultHeaders: { [key: string]: string } = {
 	"Accept":"application/json",

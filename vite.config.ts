@@ -10,9 +10,9 @@ export default defineConfig({
     host: true,
     port: 8000,
     proxy: {
-      "/api": {
+      "/dev_api": {
         target: "http://host.docker.internal:3000",
-        rewrite: path => path.replace(/^\/api/, ''),
+        rewrite: path => path.replace(/^\/dev_api/, ''),
         secure: false,
       },
     },
