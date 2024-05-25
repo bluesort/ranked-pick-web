@@ -1,7 +1,6 @@
 import { useAuth } from "@/components/AuthContext";
 import { Page } from "@/components/Page";
 import { Results } from "@/components/views/surveys/details/Results";
-import { pluralize } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { LiaVoteYeaSolid } from "react-icons/lia";
 import { Button } from "@/components/ui/Button";
