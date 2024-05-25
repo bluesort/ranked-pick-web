@@ -10,6 +10,10 @@ interface Context {
 	signout: () => Promise<void>;
 }
 
+// Vite dev server doesn't support proxying on subdomain, so use subpath instead
+const apiHost = import.meta.env.PROD ?
+	`${window.location.protocol}//api.${window.location.hostname}` :
+	`${window.location.protocol}//${window.location.host}/api`;
 const api = getApiClient();
 const AuthContext = createContext<Context | undefined>(undefined);
 
@@ -19,7 +23,7 @@ export function AuthProvider({children}: {children: ReactNode}) {
 	// TODO: Move request and handlers into ApiClient
 	const request = useCallback(async (path: string, bodyParams?: BodyParams): Promise<any> => {
 		try {
-			const resp = await fetch('/api' + path, {
+			const resp = await fetch(apiHost + '/api' + path, {
 				method: 'POST',
 				headers: defaultHeaders,
 				body: bodyParams ? JSON.stringify(bodyParams) : null,
