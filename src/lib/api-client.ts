@@ -15,11 +15,6 @@ interface RefreshResponse {
 	user: CurrentUser;
 }
 
-export const defaultHeaders: { [key: string]: string } = {
-	"Accept":"application/json",
-	"Content-Type":"application/json",
-};
-
 export class ApiError {
 	error: string;
 	status: number;
@@ -28,6 +23,16 @@ export class ApiError {
 		this.status = status;
 	}
 }
+
+// Vite dev server doesn't support proxying on subdomain, so use subpath instead
+const apiHost = import.meta.env.PROD ?
+	`${window.location.protocol}//api.${window.location.hostname}` :
+	`${window.location.protocol}//${window.location.host}/api`;
+
+export const defaultHeaders: { [key: string]: string } = {
+	"Accept":"application/json",
+	"Content-Type":"application/json",
+};
 
 class ApiClient {
 	private accessToken: string | null = null;
@@ -65,7 +70,7 @@ class ApiClient {
 	}
 
 	private async requestRefresh(): Promise<RefreshResponse | null> {
-		const resp = await fetch('/api/auth/refresh', {
+		const resp = await fetch(apiHost + '/auth/refresh', {
 			method: 'POST',
 			headers: defaultHeaders,
 			credentials: "include",
@@ -90,7 +95,7 @@ class ApiClient {
 				}
 			}
 			headers['Authorization'] = 'Bearer ' + this.accessToken;
-			const resp = await fetch('/api' + path, {
+			const resp = await fetch(apiHost + path, {
 				method: method,
 				headers: headers,
 				body: bodyParams ? JSON.stringify(bodyParams) : null,
