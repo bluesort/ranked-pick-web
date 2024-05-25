@@ -23,7 +23,7 @@ export function AuthProvider({children}: {children: ReactNode}) {
 	// TODO: Move request and handlers into ApiClient
 	const request = useCallback(async (path: string, bodyParams?: BodyParams): Promise<any> => {
 		try {
-			const resp = await fetch(apiHost + '/api' + path, {
+			const resp = await fetch(apiHost + path, {
 				method: 'POST',
 				headers: defaultHeaders,
 				body: bodyParams ? JSON.stringify(bodyParams) : null,
