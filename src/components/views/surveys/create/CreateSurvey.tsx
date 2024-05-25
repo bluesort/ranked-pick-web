@@ -28,6 +28,10 @@ export function CreateSurvey() {
 
   return (
     <Page title="Create Survey">
+      <div className="flex flex-col items-center mb-4 font-bold text-error">
+        <p>Currently, all created surveys are public.</p>
+        <p>This will change in the future.</p>
+      </div>
       <Form onSubmit={handleSubmit} className="[&>*]:mb-4">
         <Label htmlFor="title">Title</Label>
         <Input

@@ -24,11 +24,24 @@ export function ListSurveys() {
 
 	return (
 		<Page title="Surveys">
-			<h3>Created</h3>
-			<CreatedSurveys surveys={createdSurveys} refetchSurveys={fetchSurveys} />
-			<Separator className="my-8" />
-			<h3>Responded To</h3>
-			<RespondedSurveys surveys={respondedSurveys} />
+			{!createdSurveys?.length && !respondedSurveys?.length && (
+				<div className="flex justify-center text-muted-foreground">
+					You have not created or responded to any surveys
+				</div>
+			)}
+			{!!createdSurveys?.length && (
+				<>
+					<h3>Created</h3>
+					<CreatedSurveys surveys={createdSurveys} refetchSurveys={fetchSurveys} />
+				</>
+			)}
+			{!!createdSurveys?.length && !!respondedSurveys?.length && <Separator className="my-8" />}
+			{!!respondedSurveys?.length && (
+				<>
+					<h3>Responded To</h3>
+					<RespondedSurveys surveys={respondedSurveys} />
+				</>
+			)}
 		</Page>
 	);
 }
