@@ -1,7 +1,7 @@
 import logo from "@/assets/logo-color.svg";
 import { Page } from "@/components/Page";
 import { Button } from "@/components/ui/Button";
-import { Link, useLocation } from "wouter";
+import { useLocation } from "wouter";
 
 export function Home() {
   const [, setLocation] = useLocation();
