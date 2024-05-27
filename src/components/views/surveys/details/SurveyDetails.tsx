@@ -41,19 +41,15 @@ export function SurveyDetails({ id }: Props) {
 
 	return (
 		<Page title={survey?.title}>
-			<p className="mb-6"></p>
 			{survey?.description && (
-        <p className="mb-6">{survey?.description}</p>
+        <div className="mb-6 flex justify-center">{survey?.description}</div>
       )}
 			<div className="mb-4 w-full flex justify-between items-center">
+				<ResponseCount responseCount={survey?.response_count} />
 				<Button onClick={handleVote} className="text-lg" role="link">
 					<LiaVoteYeaSolid size="30" className="mr-2" />
 					{hasVoted ? 'Change Vote' : 'Vote'}
 				</Button>
-				<div className="mt-2">
-					{hasVoted ? 'You have already voted' : 'You have not voted'}
-				</div>
-				<ResponseCount responseCount={survey?.response_count} />
 			</div>
 			{currentUser?.id == survey?.user_id && (
 				<Results survey={survey} />

@@ -16,7 +16,7 @@ export function SurveyRespond({id}: Props) {
   return (
     <Page title={survey?.title}>
 			{survey?.description && (
-        <p className="my-6">{survey.description}</p>
+        <div className="mb-6 flex justify-center">{survey?.description}</div>
       )}
       <VoteForm survey={survey} />
 		</Page>
