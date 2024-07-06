@@ -17,7 +17,7 @@ export function Home() {
         Create and share ranked-choice surveys.
       </p>
       <p className="mb-4">
-				Created by <a href="https://github.com/carterjackson" target="_blank">Carter Jackson</a>
+				Created by <a href="https://github.com/bluesort" target="_blank">bluesort</a>
 			</p>
       <p className="italic">This app is a work in progress.</p>
       <Button size="lg" onClick={() => setLocation('/surveys/create')} className="my-10 mr-1 font-bold p-6 text-lg" role="link">
